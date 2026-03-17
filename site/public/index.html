@@ -325,8 +325,7 @@
     }
 
     .sim-wrap {
-      display: grid; grid-template-columns: 1fr 340px; gap: 28px;
-      align-items: start;
+      display: flex; justify-content: center;
     }
     .sim-card {
       background: var(--white);
@@ -334,6 +333,7 @@
       border-radius: var(--radius-card);
       overflow: hidden;
       box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      width: 100%; max-width: 640px;
     }
     .sim-progress-bar {
       height: 3px; background: var(--border);
@@ -806,8 +806,7 @@
       .hero-visual { order: -1; }
       .hero-diagonal { display: none; }
       .stats-grid { grid-template-columns: 1fr; gap: 12px; }
-      .sim-wrap { grid-template-columns: 1fr; }
-      .est-card { position: static; }
+      .sim-wrap { justify-content: center; }
       .adv-bento { grid-template-columns: 1fr; }
       .adv-bento-left, .adv-bento-right { grid-column: 1; grid-row: auto; }
       .footer-inner { grid-template-columns: 1fr; }
@@ -1068,39 +1067,50 @@
   <div class="container">
     <div class="section-header reveal">
       <div class="section-tag">— Simulateur</div>
-      <h2 class="section-title">Simulez vos subventions<br>en 4 étapes</h2>
-      <p class="section-sub">Obtenez une estimation personnalisée basée sur votre canton, votre type de logement et vos travaux.</p>
+      <h2 class="section-title">Estimez vos subventions<br>en 5 étapes</h2>
+      <p class="section-sub">Obtenez une estimation personnalisée basée sur votre canton, votre bien, votre chauffage et vos travaux.</p>
     </div>
 
     <div class="sim-wrap reveal">
       <!-- FORM CARD -->
       <div class="sim-card">
         <div class="sim-progress-bar">
-          <div class="sim-progress-fill" id="progress-fill" style="width:25%"></div>
+          <div class="sim-progress-fill" id="progress-fill" style="width:20%"></div>
         </div>
         <div class="sim-header">
-          <div class="sim-step-indicator">Étape <span id="step-num">1</span> / 4</div>
+          <div class="sim-step-indicator">Étape <span id="step-num">1</span> / 5</div>
           <div class="sim-step-dots">
             <div class="step-dot active" id="dot-1"></div>
             <div class="step-dot" id="dot-2"></div>
             <div class="step-dot" id="dot-3"></div>
             <div class="step-dot" id="dot-4"></div>
+            <div class="step-dot" id="dot-5"></div>
           </div>
         </div>
 
         <div class="sim-body">
-          <!-- STEP 1: Canton -->
+
+          <!-- STEP 1 : Canton + localisation -->
           <div class="sim-step active" id="step-1">
-            <div class="sim-step-title">Dans quel canton est situé votre bien ?</div>
+            <div class="sim-step-title">Où se trouve votre bien ?</div>
             <div class="sim-step-sub">Les montants de subventions varient selon le canton</div>
             <div class="canton-grid">
-              <button class="canton-pill" data-canton="GE" onclick="selectCanton(this)">GE<span class="canton-name">Genève</span></button>
-              <button class="canton-pill" data-canton="VD" onclick="selectCanton(this)">VD<span class="canton-name">Vaud</span></button>
-              <button class="canton-pill" data-canton="VS" onclick="selectCanton(this)">VS<span class="canton-name">Valais</span></button>
-              <button class="canton-pill" data-canton="NE" onclick="selectCanton(this)">NE<span class="canton-name">Neuchâtel</span></button>
-              <button class="canton-pill" data-canton="FR" onclick="selectCanton(this)">FR<span class="canton-name">Fribourg</span></button>
-              <button class="canton-pill" data-canton="JU" onclick="selectCanton(this)">JU<span class="canton-name">Jura</span></button>
-              <button class="canton-pill" data-canton="BE" onclick="selectCanton(this)">BE<span class="canton-name">Berne</span></button>
+              <button class="canton-pill" data-canton="vd" onclick="selectCanton(this)">VD<span class="canton-name">Vaud</span></button>
+              <button class="canton-pill" data-canton="ge" onclick="selectCanton(this)">GE<span class="canton-name">Genève</span></button>
+              <button class="canton-pill" data-canton="fr" onclick="selectCanton(this)">FR<span class="canton-name">Fribourg</span></button>
+              <button class="canton-pill" data-canton="ne" onclick="selectCanton(this)">NE<span class="canton-name">Neuchâtel</span></button>
+              <button class="canton-pill" data-canton="vs" onclick="selectCanton(this)">VS<span class="canton-name">Valais</span></button>
+              <button class="canton-pill" data-canton="ju" onclick="selectCanton(this)">JU<span class="canton-name">Jura</span></button>
+            </div>
+            <div class="form-row" style="margin-top:14px;">
+              <div class="form-group">
+                <label class="form-label">Code postal</label>
+                <input type="text" class="form-input" id="f-npa" placeholder="1000" maxlength="4" oninput="this.value=this.value.replace(/\D/g,'');checkStep1()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Ville</label>
+                <input type="text" class="form-input" id="f-ville" placeholder="Lausanne" oninput="checkStep1()">
+              </div>
             </div>
             <div class="sim-nav">
               <div></div>
@@ -1111,27 +1121,46 @@
             </div>
           </div>
 
-          <!-- STEP 2: Housing type -->
+          <!-- STEP 2 : Bien immobilier -->
           <div class="sim-step" id="step-2">
-            <div class="sim-step-title">Quel est le type de votre logement ?</div>
-            <div class="sim-step-sub">Le type de bien influence les aides disponibles</div>
-            <div class="option-grid">
-              <button class="option-card" data-housing="maison" onclick="selectOption(this,'housing')">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
-                <div class="option-title">Maison individuelle</div>
-                <div class="option-sub">Villa ou maison</div>
-              </button>
-              <button class="option-card" data-housing="appartement" onclick="selectOption(this,'housing')">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M9 3v18M15 3v18M2 9h20M2 15h20"/></svg>
-                <div class="option-title">Appartement</div>
-                <div class="option-sub">En PPE ou locataire</div>
-              </button>
-              <button class="option-card" data-housing="immeuble" onclick="selectOption(this,'housing')">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 8h20M2 14h20M8 2v20M16 2v20"/></svg>
-                <div class="option-title">Immeuble locatif</div>
-                <div class="option-sub">Multi-logements</div>
-              </button>
+            <div class="sim-step-title">Votre bien immobilier</div>
+            <div class="sim-step-sub">Ces informations affinent votre estimation</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Type de bien</label>
+                <select class="form-input" id="f-statut" onchange="checkStep2()" style="-webkit-appearance:none;appearance:none;">
+                  <option value="">— Choisir —</option>
+                  <option value="maison">Maison individuelle</option>
+                  <option value="ppe">Appartement (PPE)</option>
+                  <option value="immeuble">Immeuble locatif</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Construit en</label>
+                <select class="form-input" id="f-annee" onchange="checkStep2()" style="-webkit-appearance:none;appearance:none;">
+                  <option value="">— Choisir —</option>
+                  <option value="a60">Avant 1960</option>
+                  <option value="60_80">1960 – 1980</option>
+                  <option value="80_00">1981 – 2000</option>
+                  <option value="p00">Après 2000</option>
+                </select>
+              </div>
             </div>
+            <div class="form-group">
+              <label class="form-label">Surface chauffée (m²)</label>
+              <input type="number" class="form-input" id="f-sre" placeholder="150" min="20" oninput="autoCalcSurfaces();checkStep2()">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Façades estimées (m²)</label>
+                <input type="number" class="form-input" id="f-facade" placeholder="—" oninput="checkStep2()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Toiture estimée (m²)</label>
+                <input type="number" class="form-input" id="f-toiture" placeholder="—" oninput="checkStep2()">
+              </div>
+            </div>
+            <p style="font-size:12px;color:var(--muted);margin-top:-4px;margin-bottom:8px;">⚡ Façades et toiture calculées automatiquement depuis votre surface.</p>
             <div class="sim-nav">
               <button class="btn-back" onclick="goToStep(1)">← Retour</button>
               <button class="btn-next" id="next-2" onclick="goToStep(3)" disabled>
@@ -1141,34 +1170,33 @@
             </div>
           </div>
 
-          <!-- STEP 3: Project type -->
+          <!-- STEP 3 : Chauffage actuel -->
           <div class="sim-step" id="step-3">
-            <div class="sim-step-title">Quel type de travaux souhaitez-vous réaliser ?</div>
-            <div class="sim-step-sub">Sélectionnez votre projet principal</div>
-            <div class="option-grid option-grid-2">
-              <button class="option-card" data-project="isolation" onclick="selectOption(this,'project')">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/><path d="M2 9h20" stroke-dasharray="2,2" opacity="0.4"/></svg>
-                <div class="option-title">Isolation thermique</div>
-                <div class="option-sub">Toiture, façade, sol</div>
-                <div class="option-amount" id="est-isolation">Jusqu'à CHF —</div>
+            <div class="sim-step-title">Quel est votre chauffage actuel ?</div>
+            <div class="option-grid option-grid-2" style="grid-template-columns:repeat(3,1fr);">
+              <button class="option-card" data-chauf="mazout" onclick="selectSingle(this,'chauf','next-3')">
+                <div style="font-size:28px;margin-bottom:8px;">🛢️</div>
+                <div class="option-title">Mazout</div>
               </button>
-              <button class="option-card" data-project="pac" onclick="selectOption(this,'project')">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8.5 14.5A2.5 2.5 0 0011 17c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5.5 4-1 6.5a2.5 2.5 0 004.5 1c.5-1.5-.5-3-.5-4.5s1.5-4.5 1.5-4.5"/><path d="M9.5 10A7 7 0 0016 6a7 7 0 01-6.5 4z"/></svg>
+              <button class="option-card" data-chauf="gaz" onclick="selectSingle(this,'chauf','next-3')">
+                <div style="font-size:28px;margin-bottom:8px;">🔥</div>
+                <div class="option-title">Gaz</div>
+              </button>
+              <button class="option-card" data-chauf="elec" onclick="selectSingle(this,'chauf','next-3')">
+                <div style="font-size:28px;margin-bottom:8px;">⚡</div>
+                <div class="option-title">Électrique</div>
+              </button>
+              <button class="option-card" data-chauf="pac" onclick="selectSingle(this,'chauf','next-3')">
+                <div style="font-size:28px;margin-bottom:8px;">♻️</div>
                 <div class="option-title">Pompe à chaleur</div>
-                <div class="option-sub">Remplacement chaudière</div>
-                <div class="option-amount" id="est-pac">Jusqu'à CHF —</div>
               </button>
-              <button class="option-card" data-project="solar" onclick="selectOption(this,'project')">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                <div class="option-title">Panneaux photovoltaïques</div>
-                <div class="option-sub">Production solaire</div>
-                <div class="option-amount" id="est-solar">Jusqu'à CHF —</div>
+              <button class="option-card" data-chauf="bois" onclick="selectSingle(this,'chauf','next-3')">
+                <div style="font-size:28px;margin-bottom:8px;">🪵</div>
+                <div class="option-title">Bois / pellets</div>
               </button>
-              <button class="option-card" data-project="global" onclick="selectOption(this,'project')">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <div class="option-title">Rénovation globale</div>
-                <div class="option-sub">Assainissement complet</div>
-                <div class="option-amount" id="est-global">Jusqu'à CHF —</div>
+              <button class="option-card" data-chauf="autre" onclick="selectSingle(this,'chauf','next-3')">
+                <div style="font-size:28px;margin-bottom:8px;">🌐</div>
+                <div class="option-title">Réseau / autre</div>
               </button>
             </div>
             <div class="sim-nav">
@@ -1180,87 +1208,205 @@
             </div>
           </div>
 
-          <!-- STEP 4: Contact -->
+          <!-- STEP 4 : Travaux (multi-select) -->
           <div class="sim-step" id="step-4">
-            <div class="sim-step-title">Vos coordonnées</div>
-            <div class="sim-step-sub">Pour recevoir votre estimation personnalisée</div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Prénom</label>
-                <input type="text" class="form-input" id="f-prenom" placeholder="Jean" />
-              </div>
-              <div class="form-group">
-                <label class="form-label">Nom</label>
-                <input type="text" class="form-input" id="f-nom" placeholder="Dupont" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Adresse e-mail</label>
-              <input type="email" class="form-input" id="f-email" placeholder="jean.dupont@exemple.ch" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Téléphone</label>
-              <input type="tel" class="form-input" id="f-tel" placeholder="+41 79 000 00 00" />
+            <div class="sim-step-title">Quels travaux planifiez-vous ?</div>
+            <div class="sim-step-sub">Plusieurs choix possibles</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="tw-row" data-tw="chauffage" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🔄</div><div class="tw-txt"><div class="tw-lbl">Remplacement du chauffage</div><div class="tw-sub">PAC, pellets, géothermie…</div></div><span class="tw-amt" id="tw-chauffage"></span></div>
+              <div class="tw-row" data-tw="isolation" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🧱</div><div class="tw-txt"><div class="tw-lbl">Isolation thermique</div><div class="tw-sub">Toiture, façades, sol</div></div><span class="tw-amt" id="tw-isolation"></span></div>
+              <div class="tw-row" data-tw="solaire" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">☀️</div><div class="tw-txt"><div class="tw-lbl">Installation solaire</div><div class="tw-sub">Panneaux PV ou solaire thermique</div></div><span class="tw-amt" id="tw-solaire"></span></div>
+              <div class="tw-row" data-tw="fenetres" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🪟</div><div class="tw-txt"><div class="tw-lbl">Fenêtres &amp; portes</div><div class="tw-sub">Double ou triple vitrage</div></div></div>
+              <div class="tw-row" data-tw="salle_bain" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🚿</div><div class="tw-txt"><div class="tw-lbl">Salle de bain</div><div class="tw-sub">Rénovation complète</div></div></div>
+              <div class="tw-row" data-tw="cuisine" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🍳</div><div class="tw-txt"><div class="tw-lbl">Cuisine</div><div class="tw-sub">Rénovation ou remplacement</div></div></div>
+              <div class="tw-row" data-tw="amenagement" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🛋️</div><div class="tw-txt"><div class="tw-lbl">Aménagement intérieur</div><div class="tw-sub">Parquet, cloisons, électricité</div></div></div>
+              <div class="tw-row" data-tw="toiture_couv" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🏚️</div><div class="tw-txt"><div class="tw-lbl">Réfection de toiture</div><div class="tw-sub">Tuiles, ardoise, zinc…</div></div></div>
+              <div class="tw-row" data-tw="facade_ext" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🎨</div><div class="tw-txt"><div class="tw-lbl">Ravalement de façade</div><div class="tw-sub">Crépis, peinture, bardage</div></div></div>
             </div>
             <div class="sim-nav">
               <button class="btn-back" onclick="goToStep(3)">← Retour</button>
-              <button class="btn-next" onclick="submitForm()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+              <button class="btn-next" onclick="goToStep(5)">
+                Continuer
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 5 : Timing -->
+          <div class="sim-step" id="step-5">
+            <div class="sim-step-title">Où en êtes-vous ?</div>
+            <div class="option-grid option-grid-2">
+              <button class="option-card" data-timing="planif" onclick="selectSingle(this,'timing','next-5')">
+                <div style="font-size:28px;margin-bottom:8px;">✏️</div>
+                <div class="option-title">Je réfléchis encore</div>
+                <div class="option-sub">Pas encore de devis</div>
+              </button>
+              <button class="option-card" data-timing="devis" onclick="selectSingle(this,'timing','next-5')">
+                <div style="font-size:28px;margin-bottom:8px;">📄</div>
+                <div class="option-title">J'ai des devis</div>
+                <div class="option-sub">Travaux pas commencés</div>
+              </button>
+              <button class="option-card" data-timing="encours" onclick="selectSingle(this,'timing','next-5')">
+                <div style="font-size:28px;margin-bottom:8px;">🚧</div>
+                <div class="option-title">Travaux en cours</div>
+              </button>
+              <button class="option-card" data-timing="fin" onclick="selectSingle(this,'timing','next-5')">
+                <div style="font-size:28px;margin-bottom:8px;">✅</div>
+                <div class="option-title">Travaux terminés</div>
+              </button>
+            </div>
+            <div class="sim-nav">
+              <button class="btn-back" onclick="goToStep(4)">← Retour</button>
+              <button class="btn-next" id="next-5" onclick="showContactGate()" disabled>
+                Voir mon estimation →
+              </button>
+            </div>
+          </div>
+
+          <!-- CONTACT GATE -->
+          <div class="sim-step" id="step-contact">
+            <div class="sim-step-title">Accédez à votre rapport gratuit</div>
+            <div class="sim-step-sub">Entrez vos coordonnées — rappel sous 24h, sans engagement</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Prénom et nom *</label>
+                <input type="text" class="form-input" id="f-nom-complet" placeholder="Jean Dupont" oninput="checkContact()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Téléphone *</label>
+                <input type="tel" class="form-input" id="f-tel" placeholder="+41 79 000 00 00" oninput="checkContact()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Adresse e-mail *</label>
+              <input type="email" class="form-input" id="f-email" placeholder="jean.dupont@exemple.ch" oninput="checkContact()">
+            </div>
+            <div class="sim-nav">
+              <button class="btn-back" onclick="goToStep(5)">← Retour</button>
+              <button class="btn-next" id="next-contact" onclick="submitForm()" disabled>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
                 Calculer mes subventions
               </button>
             </div>
+            <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;">🔒 Données confidentielles · Sans engagement</p>
           </div>
 
           <!-- SUCCESS -->
           <div class="sim-step" id="step-success">
             <div class="success-step">
               <div class="success-icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2ECC71" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22a85a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
-              <div class="success-h">Votre simulation est prête !</div>
-              <p class="success-p">Nous avons bien reçu votre demande. Un de nos experts vous contactera dans les 24h avec une estimation détaillée.</p>
-              <button class="rdv-btn" onclick="openRdv()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                Prendre un rendez-vous
-              </button>
+              <div class="success-h">Votre rapport est prêt !</div>
+              <div style="background:linear-gradient(135deg,var(--green),var(--green-dim));border-radius:12px;padding:18px 20px;margin:16px 0;color:#fff;text-align:left;">
+                <div style="font-size:11px;font-weight:700;letter-spacing:.08em;opacity:.7;text-transform:uppercase;margin-bottom:4px;">Estimation de vos subventions</div>
+                <div style="font-size:30px;font-weight:900;line-height:1;" id="succ-amt">—</div>
+                <div style="font-size:12px;opacity:.7;margin-top:4px;">Un conseiller vous aide à maximiser ce montant</div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+                <div style="background:var(--bg-card);border-radius:10px;padding:12px;"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:.05em;margin-bottom:3px;">Contact</div><div style="font-size:13px;font-weight:600;" id="succ-nom">—</div></div>
+                <div style="background:var(--bg-card);border-radius:10px;padding:12px;"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:.05em;margin-bottom:3px;">Localisation</div><div style="font-size:13px;font-weight:600;" id="succ-loc">—</div></div>
+              </div>
+              <button class="btn" style="width:100%;justify-content:center;margin-bottom:10px;" onclick="showReport()">📄 Voir mon rapport détaillé</button>
+              <button style="font-size:12px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:inherit;display:block;margin:0 auto;" onclick="restartSim()">Nouvelle analyse</button>
             </div>
           </div>
+
+          <!-- RAPPORT DÉTAILLÉ -->
+          <div class="sim-step" id="step-report">
+            <div style="background:linear-gradient(135deg,var(--green),#0d6b35);border-radius:12px;padding:20px;margin-bottom:14px;color:#fff;position:relative;overflow:hidden;">
+              <div style="position:absolute;right:10px;bottom:-14px;font-size:70px;opacity:.07;">🌿</div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.08em;opacity:.6;text-transform:uppercase;margin-bottom:5px;">Rapport personnalisé — 2026</div>
+              <div style="font-size:20px;font-weight:800;margin-bottom:3px;position:relative;" id="rpt-nom">—</div>
+              <div style="font-size:12px;opacity:.6;margin-bottom:12px;" id="rpt-loc">—</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;" id="rpt-pills"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+              <div style="background:var(--bg-card);border-radius:10px;padding:16px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Minimum garanti</div><div style="font-size:24px;font-weight:800;color:var(--green);" id="rpt-min">—</div></div>
+              <div style="background:var(--bg-card);border-radius:10px;padding:16px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Potentiel maximum</div><div style="font-size:24px;font-weight:800;color:#d97706;" id="rpt-max">—</div></div>
+            </div>
+            <div id="rpt-alert"></div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:14px 0 8px;">Aides identifiées</div>
+            <div id="rpt-list"></div>
+            <div id="rpt-na-section" style="display:none;">
+              <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin:14px 0 8px;">Travaux hors programme</div>
+              <div id="rpt-nalist"></div>
+            </div>
+            <div style="background:rgba(34,168,90,0.08);border:1px solid rgba(34,168,90,0.2);border-radius:10px;padding:16px;margin:14px 0;display:flex;align-items:center;gap:12px;">
+              <div style="font-size:22px;flex-shrink:0;">🗓️</div>
+              <div style="flex:1;"><div style="font-size:13px;font-weight:600;margin-bottom:2px;">Besoin d'aide pour votre dossier ?</div><div style="font-size:12px;color:var(--muted);">Nos conseillers gèrent toutes les démarches à votre place.</div></div>
+              <a href="#contact" style="background:var(--green);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;text-decoration:none;">Prendre RDV</a>
+            </div>
+            <p style="font-size:11px;color:var(--muted);line-height:1.6;padding:10px;background:var(--bg-card);border-radius:8px;">Estimations basées sur les barèmes 2026 du Programme Bâtiments. Montants réels dépendant du CECB+ et des budgets cantonaux.</p>
+            <button class="btn-back" style="display:block;margin:14px auto 0;" onclick="restartSim()">← Nouvelle analyse</button>
+          </div>
+
         </div>
       </div>
 
-      <!-- ESTIMATION SIDEBAR -->
-      <div class="est-card reveal reveal-delay-1" id="est-sidebar">
-        <div class="est-label">Estimation en temps réel</div>
-        <div id="est-pending-block" class="est-pending">
-          <div class="est-pending-dot"></div>
-          <div class="est-pending-text">Sélectionnez votre canton pour commencer…</div>
-        </div>
-        <div id="est-result-block" style="display:none">
-          <div class="est-amount" id="est-display">CHF 0</div>
-          <div class="est-sub">Estimation maximale pour votre projet</div>
-          <div class="est-breakdown">
-            <div class="est-row">
-              <span class="est-row-label">Canton</span>
-              <span class="est-row-val" id="est-canton-val">—</span>
-            </div>
-            <div class="est-row">
-              <span class="est-row-label">Programme</span>
-              <span class="est-row-val green">GEnergie</span>
-            </div>
-            <div class="est-divider"></div>
-            <div class="est-row">
-              <span class="est-row-label">Subvention max.</span>
-              <span class="est-row-val green" id="est-max-val">—</span>
-            </div>
-          </div>
-        </div>
-        <div class="est-info">
-          Les montants sont des estimations indicatives. Le montant final dépend de votre situation et des critères d'éligibilité.
+      <!-- hidden elements kept for JS compatibility -->
+      <div style="display:none" id="est-sidebar">
+        <div id="est-pending-block"></div>
+        <div id="est-result-block">
+          <div id="est-display"></div>
+          <div id="est-canton-val"></div>
+          <div id="est-iso-val"></div>
+          <div id="est-ch-val"></div>
+          <div id="est-sol-val"></div>
+          <div id="est-max-val"></div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  /* ─── TRAVAUX ROWS ─────────────────────── */
+  .tw-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer; background: #fff;
+    transition: all 0.15s; user-select: none;
+  }
+  .tw-row:hover { border-color: var(--green); background: rgba(34,168,90,0.04); }
+  .tw-row.sel { border-color: var(--green); background: rgba(34,168,90,0.07); }
+  .tw-chk {
+    width: 18px; height: 18px; border-radius: 5px;
+    border: 1.5px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 11px; color: transparent;
+    transition: all 0.15s;
+  }
+  .tw-row.sel .tw-chk { border-color: var(--green); background: var(--green); color: #fff; }
+  .tw-row.sel .tw-chk::after { content: '✓'; }
+  .tw-ico { font-size: 16px; flex-shrink: 0; }
+  .tw-txt { flex: 1; }
+  .tw-lbl { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+  .tw-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .tw-amt { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; background: rgba(34,168,90,0.1); color: var(--green-dim); }
+
+  /* ─── REPORT ITEMS ─────────────────────── */
+  .rpt-si { background: #fff; border-radius: 10px; margin-bottom: 7px; overflow: hidden; display: flex; border: 1px solid var(--border); }
+  .rpt-sibar { width: 3px; flex-shrink: 0; }
+  .rpt-sibar.g { background: var(--green); }
+  .rpt-sibar.a { background: #d97706; }
+  .rpt-sibar.x { background: var(--border2); }
+  .rpt-sibody { padding: 12px 14px; flex: 1; }
+  .rpt-sirow { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .rpt-siname { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+  .rpt-siprog { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .rpt-simin { font-size: 15px; font-weight: 700; color: var(--green); }
+  .rpt-simax { font-size: 11px; color: var(--muted); }
+  .rpt-sibase { font-size: 11px; color: var(--muted); margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); line-height: 1.4; }
+  .rpt-al { padding: 10px 13px; border-radius: 8px; margin-bottom: 10px; font-size: 12px; line-height: 1.6; display: flex; gap: 8px; }
+  .rpt-al.ok  { background: rgba(34,168,90,0.08); color: #155e35; border: 1px solid rgba(34,168,90,0.2); }
+  .rpt-al.warn { background: rgba(217,119,6,0.08); color: #92400e; border: 1px solid rgba(217,119,6,0.2); }
+  .rpt-al.err  { background: rgba(220,38,38,0.07); color: #991b1b; border: 1px solid rgba(220,38,38,0.15); }
+  .rpt-pill { background: rgba(255,255,255,0.25); color: #fff; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+  .na-pill { font-size: 11px; font-weight: 600; color: #92400e; background: rgba(217,119,6,0.1); padding: 2px 8px; border-radius: 8px; }
+</style>
 
 <!-- ═══════════════════════════════════════ ADVANTAGES -->
 <section id="avantages">
@@ -1653,22 +1799,36 @@
   // ─── STATE ─────────────────────────────
   const state = {
     canton: null,
-    housing: null,
-    project: null,
+    npa: '',
+    ville: '',
+    statut: '',
+    annee: '',
+    sre: 0,
+    facade: 0,
+    toiture: 0,
+    chauf: null,
+    travaux: [],
+    timing: null,
+    nm: '',
+    ph: '',
     currentStep: 1,
     stickyDismissed: false
   };
 
-  // ─── SUBSIDY TABLE ──────────────────────
-  const subsidies = {
-    GE: { isolation: 12000, pac: 9000, solar: 15000, global: 45000 },
-    VD: { isolation: 10000, pac: 8000, solar: 12000, global: 38000 },
-    VS: { isolation: 8000,  pac: 7000, solar: 10000, global: 32000 },
-    NE: { isolation: 9000,  pac: 7500, solar: 11000, global: 35000 },
-    FR: { isolation: 8500,  pac: 7000, solar: 10500, global: 33000 },
-    JU: { isolation: 7500,  pac: 6500, solar: 9500,  global: 30000 },
-    BE: { isolation: 11000, pac: 8500, solar: 13000, global: 40000 }
-  };
+  // ─── CANTON NAMES ──────────────────────
+  const CN = { vd:'Vaud', ge:'Genève', fr:'Fribourg', ne:'Neuchâtel', vs:'Valais', ju:'Jura' };
+
+  // ─── RATES (Programme Bâtiments 2026) ──
+  function getRates(c) {
+    return ({
+      vd:{it:[40,60],ifc:[40,65],is:[30,50],pac:9000,pgeo:4000,pelec:7000,pv:[300,550],st:3000},
+      ge:{it:[50,80],ifc:[60,85],is:[40,60],pac:14000,pgeo:6000,pelec:10000,pv:[350,650],st:4000},
+      fr:{it:[35,55],ifc:[35,55],is:[25,45],pac:7000,pgeo:3500,pelec:5500,pv:[250,500],st:2500},
+      ne:{it:[40,60],ifc:[40,65],is:[30,50],pac:9000,pgeo:4000,pelec:7000,pv:[300,550],st:3000},
+      vs:{it:[35,55],ifc:[40,60],is:[30,50],pac:8000,pgeo:5000,pelec:6500,pv:[280,520],st:3500},
+      ju:{it:[30,50],ifc:[35,55],is:[25,40],pac:6500,pgeo:3000,pelec:5000,pv:[250,480],st:2500},
+    }[c]) || {it:[40,60],ifc:[40,65],is:[30,50],pac:9000,pgeo:4000,pelec:7000,pv:[300,550],st:3000};
+  }
 
   function fmt(n) {
     return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
@@ -1719,52 +1879,153 @@
     document.querySelectorAll('.canton-pill').forEach(p => p.classList.remove('selected'));
     el.classList.add('selected');
     state.canton = el.dataset.canton;
-    document.getElementById('next-1').disabled = false;
+    updateTwAmounts();
+    checkStep1();
     updateEstimation();
   }
 
-  // ─── OPTION SELECT ──────────────────────
-  function selectOption(el, type) {
+  function checkStep1() {
+    const npa = document.getElementById('f-npa').value.trim();
+    const ville = document.getElementById('f-ville').value.trim();
+    state.npa = npa;
+    state.ville = ville;
+    document.getElementById('next-1').disabled = !(state.canton && npa.length === 4 && ville.length > 0);
+  }
+
+  // ─── BIEN IMMOBILIER ─────────────────────
+  function autoCalcSurfaces() {
+    const sre = parseFloat(document.getElementById('f-sre').value) || 0;
+    state.sre = sre;
+    if (sre > 0) {
+      const facade = Math.round(sre * 1.4);
+      const toiture = Math.round(sre * 0.75);
+      state.facade = facade;
+      state.toiture = toiture;
+      document.getElementById('f-facade').value = facade;
+      document.getElementById('f-toiture').value = toiture;
+    }
+    checkStep2();
+    updateTwAmounts();
+    updateEstimation();
+  }
+
+  function checkStep2() {
+    const statut = document.getElementById('f-statut').value;
+    const annee = document.getElementById('f-annee').value;
+    const sre = parseFloat(document.getElementById('f-sre').value) || 0;
+    const facade = parseFloat(document.getElementById('f-facade').value) || 0;
+    const toiture = parseFloat(document.getElementById('f-toiture').value) || 0;
+    state.statut = statut;
+    state.annee = annee;
+    state.sre = sre;
+    if (facade > 0) state.facade = facade;
+    if (toiture > 0) state.toiture = toiture;
+    document.getElementById('next-2').disabled = !(statut && annee && sre >= 20);
+  }
+
+  // ─── SINGLE SELECT ───────────────────────
+  function selectSingle(el, key, nextId) {
     const grid = el.closest('.option-grid');
     grid.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
-    if (type === 'housing') {
-      state.housing = el.dataset.housing;
-      document.getElementById('next-2').disabled = false;
-    } else {
-      state.project = el.dataset.project;
-      document.getElementById('next-3').disabled = false;
-      updateEstimation();
-    }
+    state[key] = el.dataset[key];
+    document.getElementById(nextId).disabled = false;
+    updateEstimation();
   }
 
-  // ─── ESTIMATION UPDATE ──────────────────
-  function updateEstimation() {
-    const pendingBlock = document.getElementById('est-pending-block');
-    const resultBlock = document.getElementById('est-result-block');
-    const display = document.getElementById('est-display');
-    const cantonVal = document.getElementById('est-canton-val');
-    const maxVal = document.getElementById('est-max-val');
-
-    // Update per-project amounts in step 3
-    if (state.canton) {
-      const c = subsidies[state.canton];
-      document.getElementById('est-isolation').textContent = `Jusqu'à CHF ${fmt(c.isolation)}`;
-      document.getElementById('est-pac').textContent       = `Jusqu'à CHF ${fmt(c.pac)}`;
-      document.getElementById('est-solar').textContent     = `Jusqu'à CHF ${fmt(c.solar)}`;
-      document.getElementById('est-global').textContent    = `Jusqu'à CHF ${fmt(c.global)}`;
+  // ─── TRAVAUX MULTI-SELECT ────────────────
+  function toggleTravaux(el) {
+    const tw = el.dataset.tw;
+    el.classList.toggle('sel');
+    if (el.classList.contains('sel')) {
+      if (!state.travaux.includes(tw)) state.travaux.push(tw);
+    } else {
+      state.travaux = state.travaux.filter(t => t !== tw);
     }
+    updateTwAmounts();
+    updateEstimation();
+  }
 
+  function updateTwAmounts() {
     if (!state.canton) return;
+    const r = getRates(state.canton);
+    const sre = state.sre || 100;
+    const toiture = state.toiture || Math.round(sre * 0.75);
+    const facade = state.facade || Math.round(sre * 1.4);
+    const kw = Math.max(4, Math.round(sre * 0.04));
+    const isoMax = Math.round((toiture * r.it[1]) + (facade * r.ifc[1]) + (Math.round(sre * 0.5) * r.is[1]));
+    const chMax  = Math.round(Math.max(r.pac, r.pelec) * 1.5);
+    const solMax = Math.round((kw * r.pv[1]) + r.st * 1.8);
+    const elIso = document.getElementById('tw-isolation');
+    const elCh  = document.getElementById('tw-chauffage');
+    const elSol = document.getElementById('tw-solaire');
+    if (elIso) elIso.textContent = `max CHF ${fmt(isoMax)}`;
+    if (elCh)  elCh.textContent  = `max CHF ${fmt(chMax)}`;
+    if (elSol) elSol.textContent = `max CHF ${fmt(solMax)}`;
+  }
 
-    pendingBlock.style.display = 'none';
-    resultBlock.style.display = 'block';
-    cantonVal.textContent = state.canton;
+  // ─── FULL CALCULATION ────────────────────
+  function calcAll() {
+    const r = getRates(state.canton);
+    const t = state.travaux;
+    const hf = state.chauf === 'mazout' || state.chauf === 'gaz';
+    const he = state.chauf === 'elec';
+    const cn = CN[state.canton] || state.canton || '—';
+    const items = [], naItems = [];
+    let mn = 0, mx = 0;
+    function add(it) { items.push(it); mn += it.mn; mx += it.mx; }
 
-    const projectKey = state.project || 'global';
-    const amount = subsidies[state.canton][projectKey];
-    maxVal.textContent = `CHF ${fmt(amount)}`;
-    animateCounter(display, amount, 'CHF ');
+    if (t.includes('isolation')) {
+      if (state.toiture > 0) add({c:'g', n:'Isolation toiture / combles', p:'Programme Bâtiments M-01', mn:state.toiture*r.it[0], mx:state.toiture*r.it[1], b:`${state.toiture} m² × ${r.it[0]}–${r.it[1]} CHF/m²`});
+      if (state.facade > 0)  add({c:'g', n:'Isolation façades', p:'Programme Bâtiments M-01', mn:state.facade*r.ifc[0], mx:state.facade*r.ifc[1], b:`${state.facade} m² × ${r.ifc[0]}–${r.ifc[1]} CHF/m²`});
+      const s = Math.round(state.sre * 0.5);
+      add({c:'g', n:'Isolation sol', p:'Programme Bâtiments M-01', mn:s*r.is[0], mx:s*r.is[1], b:`~${s} m² estimés × ${r.is[0]}–${r.is[1]} CHF/m²`});
+    }
+    if (t.includes('chauffage') && (hf || he)) {
+      const base = he ? r.pelec : (r.pac + r.pgeo * 0.5);
+      add({c:'g', n:'Remplacement du système de chauffage', p:'Programme Bâtiments M-06', mn:Math.round(base), mx:Math.round(base * 1.5), b:'Forfait ' + cn + (state.chauf === 'mazout' ? ' · bonus dépose cuve inclus' : '')});
+      if (state.chauf === 'mazout') add({c:'a', n:'Bonus dépose cuve à mazout', p:'Mesure complémentaire', mn:1000, mx:2000, b:'Forfait fixe — attestation entreprise agréée'});
+      if (state.canton === 'vs')    add({c:'a', n:'Bonus zones de montagne', p:'Programme PSRM — Valais', mn:1500, mx:3500, b:'Majoration pour communes éligibles'});
+    }
+    if (t.includes('solaire')) {
+      const kw = Math.max(4, Math.round(state.sre * 0.04));
+      const ex = state.canton === 'ge' ? Math.round(kw * 300) : 0;
+      add({c:'g', n:`Panneaux solaires (~${kw} kWp)`, p:'Pronovo — Rétribution unique' + (state.canton === 'ge' ? ' + prime SIG' : ''), mn:kw*r.pv[0], mx:kw*r.pv[1]+ex, b:`${kw} kWp × ${r.pv[0]}–${r.pv[1]} CHF/kWp` + (state.canton === 'ge' ? ' + prime SIG' : '')});
+      add({c:'g', n:'Solaire thermique', p:'Programme Bâtiments M-11', mn:r.st, mx:Math.round(r.st * 1.8), b:'Forfait selon surface capteurs'});
+    }
+    const nbMes = ['isolation','chauffage','solaire'].filter(x => t.includes(x)).length;
+    if (nbMes >= 2 && state.sre > 0) add({c:'a', n:`Bonus rénovation combinée (${nbMes} postes)`, p:'Ordonnance protection du climat 2025', mn:state.sre*30, mx:state.sre*40, b:`${state.sre} m² × 30–40 CHF/m²`});
+
+    if (t.includes('fenetres'))    naItems.push({n:'Fenêtres & portes', b:'Non subventionné seul — éligible si couplé à une isolation des façades.'});
+    if (t.includes('salle_bain'))  naItems.push({n:'Salle de bain', b:'Hors Programme Bâtiments — déductions fiscales possibles.'});
+    if (t.includes('cuisine'))     naItems.push({n:'Cuisine', b:'Hors Programme Bâtiments — déductions fiscales possibles.'});
+    if (t.includes('amenagement')) naItems.push({n:'Aménagement intérieur', b:"Hors Programme Bâtiments — déductions fiscales possibles sur travaux d'entretien."});
+    if (t.includes('toiture_couv'))naItems.push({n:'Couverture de toiture', b:'Hors Programme Bâtiments — déduction fiscale possible si couplée à isolation.'});
+    if (t.includes('facade_ext'))  naItems.push({n:'Ravalement de façade', b:'Non subventionné seul — éligible si associé à isolation thermique.'});
+
+    return { items, naItems, mn: Math.round(mn), mx: Math.round(mx) };
+  }
+
+  // ─── ESTIMATION SIDEBAR ──────────────────
+  function updateEstimation() {
+    if (!state.canton) return;
+    document.getElementById('est-pending-block').style.display = 'none';
+    document.getElementById('est-result-block').style.display = 'block';
+    document.getElementById('est-canton-val').textContent = state.canton.toUpperCase();
+    const r = getRates(state.canton);
+    const sre = state.sre || 100;
+    const toiture = state.toiture || Math.round(sre * 0.75);
+    const facade  = state.facade  || Math.round(sre * 1.4);
+    const kw = Math.max(4, Math.round(sre * 0.04));
+    const isoMax = Math.round((toiture * r.it[1]) + (facade * r.ifc[1]) + (Math.round(sre * 0.5) * r.is[1]));
+    const chMax  = Math.round(Math.max(r.pac, r.pelec) * 1.5);
+    const solMax = Math.round((kw * r.pv[1]) + r.st * 1.8);
+    const total  = isoMax + chMax + solMax;
+    document.getElementById('est-iso-val').textContent  = `CHF ${fmt(isoMax)}`;
+    document.getElementById('est-ch-val').textContent   = `CHF ${fmt(chMax)}`;
+    document.getElementById('est-sol-val').textContent  = `CHF ${fmt(solMax)}`;
+    document.getElementById('est-max-val').textContent  = `CHF ${fmt(total)}`;
+    animateCounter(document.getElementById('est-display'), total, 'CHF ');
   }
 
   function animateCounter(el, target, prefix = '', suffix = '') {
@@ -1784,68 +2045,121 @@
 
   // ─── STEP NAVIGATION ────────────────────
   function goToStep(n) {
-    const prev = state.currentStep;
-    // Hide current
-    document.getElementById(`step-${prev}`).classList.remove('active');
-    // Show next
-    const target = document.getElementById(`step-${n}`);
-    target.classList.add('active');
+    ['step-1','step-2','step-3','step-4','step-5','step-contact','step-success','step-report'].forEach(id => {
+      document.getElementById(id)?.classList.remove('active');
+    });
+    document.getElementById(`step-${n}`).classList.add('active');
     state.currentStep = n;
-
-    // Update progress
-    const pct = (n / 4) * 100;
+    const pct = (n / 5) * 100;
     document.getElementById('progress-fill').style.width = pct + '%';
     document.getElementById('step-num').textContent = n;
-
-    // Update dots
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 5; i++) {
       const dot = document.getElementById(`dot-${i}`);
+      if (!dot) continue;
       dot.classList.remove('active', 'done');
       if (i < n) dot.classList.add('done');
       else if (i === n) dot.classList.add('active');
     }
-
-    // If moving to step 2+, update estimation
     if (n >= 2) updateEstimation();
+  }
+
+  // ─── CONTACT GATE ───────────────────────
+  function showContactGate() {
+    ['step-1','step-2','step-3','step-4','step-5'].forEach(id => {
+      document.getElementById(id)?.classList.remove('active');
+    });
+    document.getElementById('step-contact').classList.add('active');
+    document.getElementById('progress-fill').style.width = '95%';
+  }
+
+  function checkContact() {
+    const nom   = document.getElementById('f-nom-complet').value.trim();
+    const tel   = document.getElementById('f-tel').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    document.getElementById('next-contact').disabled = !(nom.length >= 2 && tel.length >= 9 && email.includes('@'));
   }
 
   // ─── FORM SUBMIT ────────────────────────
   function submitForm() {
-    let valid = true;
-    const fields = [
-      { id: 'f-prenom', label: 'prénom' },
-      { id: 'f-nom',    label: 'nom' },
-      { id: 'f-email',  label: 'email' },
-      { id: 'f-tel',    label: 'téléphone' }
-    ];
-    fields.forEach(f => {
-      const el = document.getElementById(f.id);
-      el.classList.remove('field-error');
-      const existing = el.parentNode.querySelector('.error-msg');
-      if (existing) existing.remove();
-      if (!el.value.trim()) {
-        el.classList.add('field-error');
-        const msg = document.createElement('div');
-        msg.className = 'error-msg';
-        msg.textContent = `Veuillez saisir votre ${f.label}`;
-        el.parentNode.appendChild(msg);
-        valid = false;
-      }
-      if (f.id === 'f-email' && el.value && !el.value.includes('@')) {
-        el.classList.add('field-error');
-        const msg = document.createElement('div');
-        msg.className = 'error-msg';
-        msg.textContent = 'Adresse e-mail invalide';
-        el.parentNode.appendChild(msg);
-        valid = false;
-      }
-    });
-    if (!valid) return;
-
-    // Show success
-    document.getElementById('step-4').classList.remove('active');
+    state.nm = document.getElementById('f-nom-complet').value.trim();
+    state.ph = document.getElementById('f-tel').value.trim();
+    const { mn, mx } = calcAll();
+    document.getElementById('succ-amt').textContent = `CHF ${fmt(mn)} – CHF ${fmt(mx)}`;
+    document.getElementById('succ-nom').textContent = state.nm;
+    document.getElementById('succ-loc').textContent = `${state.npa} ${state.ville}, ${CN[state.canton] || state.canton}`;
+    document.getElementById('step-contact').classList.remove('active');
     document.getElementById('step-success').classList.add('active');
     document.getElementById('progress-fill').style.width = '100%';
+  }
+
+  function showReport() {
+    document.getElementById('step-success').classList.remove('active');
+    buildReport();
+    document.getElementById('step-report').classList.add('active');
+  }
+
+  function buildReport() {
+    const cn = CN[state.canton] || state.canton || '—';
+    const al = {a60:'Avant 1960','60_80':'1960–1980','80_00':'1981–2000',p00:'Après 2000'};
+    const ch = {mazout:'Mazout',gaz:'Gaz',elec:'Électrique',pac:'PAC',bois:'Bois',autre:'Réseau/autre'};
+    const today = new Date().toLocaleDateString('fr-CH', {day:'numeric', month:'long', year:'numeric'});
+    document.getElementById('rpt-nom').textContent = 'Rapport de ' + state.nm;
+    document.getElementById('rpt-loc').textContent = `${state.npa} ${state.ville}, ${cn} · ${today}`;
+    const pills = [cn, al[state.annee]||'—', state.sre + ' m²', ch[state.chauf]||'—'];
+    document.getElementById('rpt-pills').innerHTML = pills.map(p => `<span class="rpt-pill">${p}</span>`).join('');
+    const { items, naItems, mn, mx } = calcAll();
+    document.getElementById('rpt-min').textContent = `CHF ${fmt(mn)}`;
+    document.getElementById('rpt-max').textContent = `CHF ${fmt(mx)}`;
+    const alerts = {
+      planif: `<div class="rpt-al ok"><div>✓</div><div>La demande doit être déposée <strong>avant tout début de travaux</strong>. Notre conseiller s'en occupe pour vous.</div></div>`,
+      devis:  `<div class="rpt-al warn"><div>⚠️</div><div>Déposez la demande <strong>avant de signer</strong> le contrat. Contactez rapidement notre conseiller.</div></div>`,
+      encours:`<div class="rpt-al warn"><div>⚠️</div><div>Certaines subventions peuvent être perdues. Contactez immédiatement un conseiller.</div></div>`,
+      fin:    `<div class="rpt-al err"><div>✗</div><div>Le Programme Bâtiments est fermé pour les travaux terminés. Un conseiller peut vérifier vos déductions fiscales.</div></div>`
+    };
+    document.getElementById('rpt-alert').innerHTML = alerts[state.timing] || '';
+    document.getElementById('rpt-list').innerHTML = items.length
+      ? items.map(i => `<div class="rpt-si"><div class="rpt-sibar ${i.c}"></div><div class="rpt-sibody"><div class="rpt-sirow"><div><div class="rpt-siname">${i.n}</div><div class="rpt-siprog">${i.p}</div></div><div><div class="rpt-simin">CHF ${fmt(i.mn)}</div><div class="rpt-simax">jusqu'à CHF ${fmt(i.mx)}</div></div></div><div class="rpt-sibase">${i.b}</div></div></div>`).join('')
+      : `<div class="rpt-al warn"><div>ℹ️</div><div>Aucune aide directe identifiée. Un conseiller peut approfondir votre situation.</div></div>`;
+    if (naItems.length) {
+      document.getElementById('rpt-na-section').style.display = 'block';
+      document.getElementById('rpt-nalist').innerHTML = naItems.map(i => `<div class="rpt-si"><div class="rpt-sibar x"></div><div class="rpt-sibody"><div class="rpt-sirow"><div><div class="rpt-siname">${i.n}</div></div><div><span class="na-pill">Hors programme</span></div></div><div class="rpt-sibase">${i.b}</div></div></div>`).join('');
+    }
+  }
+
+  function restartSim() {
+    Object.assign(state, {
+      canton:null, npa:'', ville:'', statut:'', annee:'',
+      sre:0, facade:0, toiture:0, chauf:null, travaux:[], timing:null,
+      nm:'', ph:'', currentStep:1
+    });
+    document.querySelectorAll('.canton-pill').forEach(p => p.classList.remove('selected'));
+    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.tw-row').forEach(r => r.classList.remove('sel'));
+    ['f-npa','f-ville','f-sre','f-facade','f-toiture','f-nom-complet','f-tel','f-email'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    ['f-statut','f-annee'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    ['step-2','step-3','step-4','step-5','step-contact','step-success','step-report'].forEach(id => {
+      document.getElementById(id)?.classList.remove('active');
+    });
+    document.getElementById('step-1').classList.add('active');
+    document.getElementById('next-1').disabled = true;
+    document.getElementById('next-2').disabled = true;
+    document.getElementById('next-3').disabled = true;
+    document.getElementById('next-5').disabled = true;
+    document.getElementById('next-contact').disabled = true;
+    document.getElementById('est-pending-block').style.display = 'block';
+    document.getElementById('est-result-block').style.display = 'none';
+    document.getElementById('rpt-na-section').style.display = 'none';
+    document.getElementById('progress-fill').style.width = '20%';
+    document.getElementById('step-num').textContent = '1';
+    for (let i = 1; i <= 5; i++) {
+      const dot = document.getElementById(`dot-${i}`);
+      if (dot) { dot.classList.remove('active','done'); if (i===1) dot.classList.add('active'); }
+    }
+    document.querySelector('.sim-wrap')?.scrollIntoView({ behavior:'smooth', block:'start' });
   }
 
   function openRdv() {
