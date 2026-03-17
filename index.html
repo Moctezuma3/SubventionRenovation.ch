@@ -325,8 +325,7 @@
     }
 
     .sim-wrap {
-      display: grid; grid-template-columns: 1fr 340px; gap: 28px;
-      align-items: start;
+      display: flex; justify-content: center;
     }
     .sim-card {
       background: var(--white);
@@ -334,6 +333,7 @@
       border-radius: var(--radius-card);
       overflow: hidden;
       box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      width: 100%; max-width: 640px;
     }
     .sim-progress-bar {
       height: 3px; background: var(--border);
@@ -806,8 +806,7 @@
       .hero-visual { order: -1; }
       .hero-diagonal { display: none; }
       .stats-grid { grid-template-columns: 1fr; gap: 12px; }
-      .sim-wrap { grid-template-columns: 1fr; }
-      .est-card { position: static; }
+      .sim-wrap { justify-content: center; }
       .adv-bento { grid-template-columns: 1fr; }
       .adv-bento-left, .adv-bento-right { grid-column: 1; grid-row: auto; }
       .footer-inner { grid-template-columns: 1fr; }
@@ -1345,46 +1344,17 @@
         </div>
       </div>
 
-      <!-- ESTIMATION SIDEBAR -->
-      <div class="est-card reveal reveal-delay-1" id="est-sidebar">
-        <div class="est-label">Estimation en temps réel</div>
-        <div id="est-pending-block" class="est-pending">
-          <div class="est-pending-dot"></div>
-          <div class="est-pending-text">Sélectionnez votre canton pour commencer…</div>
+      <!-- hidden elements kept for JS compatibility -->
+      <div style="display:none" id="est-sidebar">
+        <div id="est-pending-block"></div>
+        <div id="est-result-block">
+          <div id="est-display"></div>
+          <div id="est-canton-val"></div>
+          <div id="est-iso-val"></div>
+          <div id="est-ch-val"></div>
+          <div id="est-sol-val"></div>
+          <div id="est-max-val"></div>
         </div>
-        <div id="est-result-block" style="display:none">
-          <div class="est-amount" id="est-display">CHF 0</div>
-          <div class="est-sub">Estimation maximale des subventions</div>
-          <div class="est-breakdown">
-            <div class="est-row">
-              <span class="est-row-label">Canton</span>
-              <span class="est-row-val" id="est-canton-val">—</span>
-            </div>
-            <div class="est-row">
-              <span class="est-row-label">Programme</span>
-              <span class="est-row-val green">Programme Bâtiments</span>
-            </div>
-            <div class="est-divider"></div>
-            <div class="est-row">
-              <span class="est-row-label">Isolation</span>
-              <span class="est-row-val green" id="est-iso-val">—</span>
-            </div>
-            <div class="est-row">
-              <span class="est-row-label">Chauffage</span>
-              <span class="est-row-val green" id="est-ch-val">—</span>
-            </div>
-            <div class="est-row">
-              <span class="est-row-label">Solaire</span>
-              <span class="est-row-val green" id="est-sol-val">—</span>
-            </div>
-            <div class="est-divider"></div>
-            <div class="est-row">
-              <span class="est-row-label">Total estimé</span>
-              <span class="est-row-val green" id="est-max-val">—</span>
-            </div>
-          </div>
-        </div>
-        <div class="est-info">Les montants sont indicatifs, basés sur les barèmes 2026 du Programme Bâtiments.</div>
       </div>
     </div>
   </div>
