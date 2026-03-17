@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SubventionRénovation.ch — Jusqu'à 90'000 CHF pour votre rénovation</title>
+  <meta name="description" content="Vérifiez en moins de 30 secondes les aides disponibles pour votre logement en Suisse romande. Programme officiel de subventions énergétiques." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #FFFFFF;
+      --bg-card:   #F5F7F5;
+      --bg-card2:  #ECF0EC;
+      --green:     #22a85a;
+      --green-dim: #1a7a43;
+      --green-glow:rgba(34,168,90,0.1);
+      --white:     #FFFFFF;
+      --muted:     #666666;
+      --border:    #E0E5E0;
+      --border2:   #CDD8CD;
+      --light-bg:  #F0F5F0;
+      --light-card:#FFFFFF;
+      --text-dark: #0B0B0B;
+      --radius-card:14px;
+      --radius-btn: 8px;
+      --max:       1200px;
+      --font: 'DM Sans', system-ui, sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-dark);
+      font-family: var(--font);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: var(--green); color: var(--bg); }
+
+    /* ─── SCROLLBAR ─────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--green-dim); border-radius: 2px; }
+
+    /* ─── UTILITY ───────────────────────────────── */
+    .container { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
+    .green { color: var(--green); }
+    .tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 14px;
+      background: rgba(46,204,113,0.1);
+      border: 1px solid rgba(46,204,113,0.25);
+      border-radius: 100px;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+      color: var(--green);
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px;
+      background: var(--green);
+      color: var(--bg);
+      font-family: var(--font);
+      font-size: 15px; font-weight: 700;
+      border: none; border-radius: var(--radius-btn);
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s ease;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .btn:hover { background: #35e07c; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(46,204,113,0.3); }
+    .btn:active { transform: translateY(0); }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--green);
+      color: var(--green);
+    }
+    .btn-outline:hover { background: var(--green); color: var(--bg); }
+    .btn-lg { padding: 17px 36px; font-size: 16px; }
+    .btn-sm { padding: 10px 20px; font-size: 14px; }
+
+    /* ─── NAVBAR ────────────────────────────────── */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 20px 0;
+      transition: all 0.3s ease;
+    }
+    #navbar.scrolled {
+      padding: 14px 0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text-dark);
+    }
+    .nav-logo-text {
+      font-size: 16px; font-weight: 700; letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .nav-logo-text span { color: var(--green); }
+    .nav-links {
+      display: flex; align-items: center; gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none; color: var(--muted);
+      font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: -0.01em;
+    }
+    .nav-links a:hover { color: var(--text-dark); }
+    .nav-cta { display: flex; align-items: center; gap: 12px; }
+
+    /* hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--text-dark); border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--white); z-index: 99; padding: 100px 32px 32px;
+      flex-direction: column; gap: 24px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      text-decoration: none; color: var(--text-dark); font-size: 24px;
+      font-weight: 700; letter-spacing: -0.03em;
+      border-bottom: 1px solid var(--border); padding-bottom: 20px;
+    }
+
+    /* ─── HERO ──────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding-top: 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute; bottom: -200px; left: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(34,168,90,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute; top: 100px; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(34,168,90,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    /* diagonal accent */
+    .hero-diagonal {
+      position: absolute; right: 0; top: 0; bottom: 0; width: 42%;
+      background: linear-gradient(135deg, transparent 0%, rgba(34,168,90,0.04) 100%);
+      border-left: 1px solid rgba(34,168,90,0.08);
+      clip-path: polygon(8% 0, 100% 0, 100% 100%, 0% 100%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+      width: 100%; position: relative; z-index: 1;
+      padding: 60px 0;
+    }
+    .hero-content { display: flex; flex-direction: column; gap: 28px; }
+    .hero-h1 {
+      font-size: clamp(38px, 5vw, 58px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      margin-top: 4px;
+    }
+    .hero-sub {
+      font-size: 18px; color: var(--muted);
+      line-height: 1.65; max-width: 480px;
+      font-weight: 400;
+    }
+    .hero-trust {
+      display: flex; flex-wrap: wrap; gap: 20px; align-items: center;
+      padding-top: 4px;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13.5px; color: #666; font-weight: 500;
+    }
+    .trust-item svg { color: var(--green); flex-shrink: 0; }
+
+    /* hero illustration */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      position: relative;
+    }
+    .hero-svg-wrap {
+      position: relative;
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    .hero-badge-float {
+      position: absolute; top: -20px; right: -20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    .badge-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(46,204,113,0.2);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(46,204,113,0.2); }
+      50% { box-shadow: 0 0 0 6px rgba(46,204,113,0.1); }
+    }
+    .badge-text { font-size: 12px; font-weight: 600; color: var(--text-dark); line-height: 1.3; }
+    .badge-text span { color: var(--green); display: block; }
+    .hero-badge-float2 {
+      position: absolute; bottom: 10px; left: -30px;
+      background: var(--green);
+      border-radius: 10px; padding: 10px 14px;
+      display: flex; align-items: center; gap: 8px;
+      box-shadow: 0 8px 24px rgba(46,204,113,0.35);
+    }
+    .badge-text2 { font-size: 12px; font-weight: 700; color: var(--bg); line-height: 1.3; }
+
+    /* ─── STATS ─────────────────────────────────── */
+    #stats {
+      padding: 80px 0;
+      background: var(--light-bg);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .stat-card {
+      background: var(--white);
+      padding: 44px 40px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      position: relative; overflow: hidden;
+      transition: all 0.3s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .stat-card:hover {
+      border-color: rgba(34,168,90,0.35);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute; bottom: 0; right: 0;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(34,168,90,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .stat-number {
+      font-size: clamp(44px, 5.5vw, 68px);
+      font-weight: 800;
+      background: linear-gradient(135deg, #22a85a 0%, #1a7a43 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.04em;
+      font-family: var(--font);
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .stat-title {
+      font-size: 20px; color: var(--text-dark);
+      font-weight: 700; line-height: 1.3;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 15px; color: #888;
+      font-weight: 400; line-height: 1.5;
+    }
+
+    /* ─── SIMULATOR ─────────────────────────────── */
+    #simulateur {
+      padding: 100px 0;
+    }
+    .section-header { margin-bottom: 56px; }
+    .section-tag {
+      display: inline-block; margin-bottom: 16px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--green);
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800; letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .section-sub {
+      margin-top: 16px;
+      font-size: 17px; color: var(--muted);
+      max-width: 540px; line-height: 1.6;
+    }
+
+    .sim-wrap {
+      display: grid; grid-template-columns: 1fr 340px; gap: 28px;
+      align-items: start;
+    }
+    .sim-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+    .sim-progress-bar {
+      height: 3px; background: var(--border);
+      position: relative;
+    }
+    .sim-progress-fill {
+      height: 100%; background: var(--green);
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+      border-radius: 0 2px 2px 0;
+      box-shadow: 0 0 8px rgba(46,204,113,0.5);
+    }
+    .sim-header {
+      padding: 28px 32px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sim-step-indicator {
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    .sim-step-indicator span { color: var(--white); }
+    .sim-step-dots { display: flex; gap: 8px; }
+    .step-dot {
+      width: 28px; height: 4px; border-radius: 2px;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+    .step-dot.active { background: var(--green); }
+    .step-dot.done { background: var(--green-dim); }
+
+    .sim-body { padding: 32px; }
+    .sim-step { display: none; }
+    .sim-step.active { display: block; animation: stepIn 0.35s ease; }
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .sim-step-title {
+      font-size: 22px; font-weight: 700; letter-spacing: -0.025em;
+      margin-bottom: 8px;
+    }
+    .sim-step-sub {
+      font-size: 14px; color: var(--muted); margin-bottom: 28px;
+    }
+
+    /* canton pills */
+    .canton-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+    .canton-pill {
+      padding: 10px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px; font-weight: 700; font-family: var(--mono);
+      color: var(--muted); cursor: pointer;
+      transition: all 0.18s ease;
+      background: var(--bg-card); letter-spacing: 0.05em;
+    }
+    .canton-pill:hover { border-color: var(--green); color: var(--text-dark); }
+    .canton-pill.selected {
+      background: var(--green); border-color: var(--green);
+      color: var(--bg); box-shadow: 0 4px 16px rgba(46,204,113,0.3);
+    }
+    .canton-name {
+      font-size: 11px; font-weight: 400; font-family: var(--font);
+      display: block; letter-spacing: 0; opacity: 0.8; margin-top: 2px;
+    }
+
+    /* housing + project cards */
+    .option-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+    .option-grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .option-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 20px 16px;
+      cursor: pointer; transition: all 0.2s ease;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 10px; text-align: center; background: var(--bg-card);
+      color: var(--text-dark);
+    }
+    .option-card:hover { border-color: rgba(46,204,113,0.5); background: rgba(46,204,113,0.04); }
+    .option-card.selected {
+      border-color: var(--green);
+      background: rgba(46,204,113,0.08);
+      box-shadow: 0 0 0 1px rgba(46,204,113,0.3);
+    }
+    .option-card svg { color: var(--green); transition: transform 0.2s; }
+    .option-card:hover svg, .option-card.selected svg { transform: scale(1.1); }
+    .option-title { font-size: 14px; font-weight: 600; line-height: 1.3; }
+    .option-sub { font-size: 12px; color: var(--muted); }
+    .option-amount {
+      font-size: 12px; font-weight: 700; color: var(--green);
+      font-family: var(--mono); margin-top: 2px;
+    }
+
+    /* contact form */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .form-label { font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: 0.03em; }
+    .form-input {
+      background: var(--bg-card); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 13px 16px;
+      color: var(--text-dark); font-family: var(--font); font-size: 15px;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(34,168,90,0.12); }
+    .form-input::placeholder { color: #aaa; }
+
+    /* nav buttons */
+    .sim-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);
+    }
+    .btn-back {
+      background: none; border: 1.5px solid var(--border);
+      color: var(--muted); font-family: var(--font);
+      font-size: 14px; font-weight: 600; padding: 11px 22px;
+      border-radius: var(--radius-btn); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-back:hover { border-color: var(--text-dark); color: var(--text-dark); }
+    .btn-next {
+      background: var(--green); color: var(--bg);
+      font-family: var(--font); font-size: 15px; font-weight: 700;
+      padding: 13px 28px; border: none; border-radius: var(--radius-btn);
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .btn-next:hover { background: #35e07c; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(46,204,113,0.3); }
+    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* success step */
+    .success-step { text-align: center; padding: 20px 0; }
+    .success-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(46,204,113,0.12);
+      border: 2px solid rgba(46,204,113,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px; animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .success-h { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+    .success-p { color: var(--muted); font-size: 15px; max-width: 380px; margin: 0 auto 24px; }
+    .rdv-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; background: transparent;
+      border: 1.5px solid var(--green); color: var(--green);
+      border-radius: var(--radius-btn); font-size: 14px; font-weight: 700;
+      cursor: pointer; font-family: var(--font);
+      transition: all 0.2s;
+    }
+    .rdv-btn:hover { background: var(--green); color: var(--bg); }
+
+    /* estimation sidebar */
+    .est-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 28px 24px;
+      position: sticky; top: 100px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+    .est-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+    }
+    .est-amount {
+      font-size: 36px; font-weight: 800; color: var(--green);
+      letter-spacing: -0.04em; font-family: var(--mono);
+      line-height: 1; margin-bottom: 8px;
+      transition: all 0.3s;
+    }
+    .est-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .est-breakdown { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .est-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 14px;
+      background: var(--bg-card); border-radius: 8px;
+      font-size: 13px;
+    }
+    .est-row-label { color: var(--muted); }
+    .est-row-val { font-weight: 700; font-family: var(--mono); color: var(--text-dark); }
+    .est-row-val.green { color: var(--green); }
+    .est-divider { height: 1px; background: var(--border); margin: 4px 0; }
+    .est-info {
+      font-size: 12px; color: #555; line-height: 1.5;
+      border-top: 1px solid var(--border); padding-top: 16px;
+    }
+    .est-pending {
+      display: flex; align-items: center; gap: 10px;
+      padding: 16px; background: var(--bg-card); border-radius: 8px; margin-bottom: 20px;
+    }
+    .est-pending-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--muted); animation: blink 1.4s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .est-pending-text { font-size: 13px; color: var(--muted); }
+
+    /* ─── ADVANTAGES (carousel) ─────────────────── */
+    #avantages {
+      background: var(--light-bg);
+      padding: 100px 0;
+      overflow: hidden;
+    }
+    #avantages .section-title { color: var(--text-dark); }
+    #avantages .section-tag { color: var(--green); }
+    #avantages .section-sub { color: #666; }
+
+    /* advantages row */
+    .adv-carousel-wrap { }
+    .adv-carousel {
+      display: flex;
+      gap: 20px;
+    }
+
+    /* cards */
+    .adv-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 32px 28px;
+      border: 1.5px solid var(--border);
+      transition: all 0.3s ease;
+      display: flex; flex-direction: column;
+      flex: 1 1 0;
+      min-height: 320px;
+    }
+    .adv-card:hover {
+      border-color: rgba(34,168,90,0.4);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.09);
+      transform: translateY(-3px);
+    }
+
+    /* green label badge on each card */
+    .adv-label {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 6px 14px;
+      background: rgba(34,168,90,0.1);
+      border: 1px solid rgba(34,168,90,0.2);
+      border-radius: 100px;
+      font-size: 12px; font-weight: 700;
+      color: var(--green); letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      width: fit-content;
+    }
+    .adv-stat {
+      font-size: clamp(40px, 3.5vw, 58px);
+      font-weight: 800;
+      background: linear-gradient(135deg, #22a85a 0%, #1a7a43 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.05em;
+      line-height: 1; margin-bottom: 18px;
+    }
+    .adv-title {
+      font-size: 19px; font-weight: 700; color: var(--text-dark);
+      margin-bottom: 10px; letter-spacing: -0.02em; line-height: 1.3;
+    }
+    .adv-text { font-size: 14.5px; color: #666; line-height: 1.65; flex: 1; }
+
+
+    /* ─── PROJETS (photo card style) ───────────── */
+    #projets {
+      padding: 100px 0;
+      background: #F7F7F5;
+    }
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .proj-photo-card {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      height: 520px;
+    }
+    /* gradient "photo" background */
+    .proj-photo-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    }
+    .proj-photo-card:hover .proj-photo-bg { transform: scale(1.06); }
+
+    /* always-on dark gradient at bottom */
+    .proj-photo-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.12) 45%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    /* hover overlay — lightens from top */
+    .proj-hover-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.35) 60%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      z-index: 2;
+    }
+    .proj-photo-card:hover .proj-hover-overlay { opacity: 1; }
+
+    /* content always at bottom */
+    .proj-photo-content {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 22px 20px;
+      z-index: 3;
+    }
+    .proj-top-bar {
+      position: absolute; top: 16px; left: 16px; right: 16px;
+      z-index: 3;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .proj-type-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 100px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #fff;
+    }
+    .proj-location-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 12px;
+      background: rgba(0,0,0,0.28);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.85);
+    }
+    .proj-photo-title {
+      font-size: 20px; font-weight: 800; color: #fff;
+      letter-spacing: -0.025em; line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    /* stats pills — always visible */
+    .proj-stats-row {
+      display: flex; flex-direction: column; gap: 7px;
+      opacity: 1;
+      transform: translateY(0);
+      margin-bottom: 16px;
+    }
+    .proj-stat-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 100px;
+      padding: 7px 14px;
+      width: fit-content;
+    }
+    .proj-stat-pill-icon {
+      width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .proj-stat-pill-icon.green-bg { background: var(--green); }
+    .proj-stat-pill-icon.blue-bg  { background: #3b9eff; }
+    .proj-stat-pill-icon.gold-bg  { background: #f0a500; }
+    .proj-stat-pill-label { font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 500; }
+    .proj-stat-pill-val { font-size: 13px; font-weight: 800; color: #fff; font-family: var(--mono); margin-left: auto; }
+
+    /* CTA button — always visible */
+    .proj-photo-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 12px;
+      background: #fff;
+      color: var(--text-dark);
+      border: none; border-radius: 10px;
+      font-family: var(--font); font-size: 13px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s;
+      opacity: 1; transform: translateY(0);
+    }
+    .proj-photo-btn:hover { background: var(--green); color: #fff; }
+
+    /* ─── CTA SECTION ───────────────────────────── */
+    #cta-final {
+      padding: 100px 0;
+      background: var(--text-dark);
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    #cta-final .cta-final-title { color: #FFFFFF; }
+    #cta-final .cta-final-sub { color: #888; }
+    #cta-final .cta-trust-item { color: #666; }
+    .cta-glow {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse, rgba(34,168,90,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-final-inner { position: relative; z-index: 1; }
+    .cta-final-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800; letter-spacing: -0.04em; margin-bottom: 16px;
+    }
+    .cta-final-sub { font-size: 18px; color: var(--muted); margin-bottom: 36px; }
+    .cta-final-trust {
+      margin-top: 28px; display: flex; justify-content: center;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .cta-trust-item { font-size: 13px; color: #555; display: flex; align-items: center; gap: 6px; }
+    .cta-trust-item svg { color: var(--green); }
+
+    /* ─── FOOTER ────────────────────────────────── */
+    footer {
+      padding: 56px 0 36px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      display: grid; grid-template-columns: 1fr auto auto; gap: 40px;
+      align-items: start; margin-bottom: 40px;
+    }
+    .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .footer-logo-text { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-dark); }
+    .footer-logo-text span { color: var(--green); }
+    .footer-tagline { font-size: 13px; color: var(--muted); max-width: 260px; line-height: 1.5; }
+    .footer-col-title { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: #555; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-bottom {
+      padding-top: 28px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-size: 13px; color: #444; }
+    .footer-disclaimer { font-size: 12px; color: #444; max-width: 500px; text-align: right; }
+
+    /* ─── STICKY CTA BAR ────────────────────────── */
+    #sticky-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(11,11,11,0.96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid #222;
+      padding: 16px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 50; transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    #sticky-bar.visible { transform: translateY(0); }
+    .sticky-text { font-size: 14px; color: #888; }
+    .sticky-text strong { color: #FFFFFF; }
+    .sticky-actions { display: flex; align-items: center; gap: 12px; }
+    .sticky-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1.5px solid #333; background: none;
+      color: #888; cursor: pointer; font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .sticky-close:hover { border-color: #fff; color: #fff; }
+
+    /* ─── RESPONSIVE ────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; padding: 48px 0; }
+      .hero-visual { order: -1; }
+      .hero-diagonal { display: none; }
+      .stats-grid { grid-template-columns: 1fr; gap: 12px; }
+      .sim-wrap { grid-template-columns: 1fr; }
+      .est-card { position: static; }
+      .adv-bento { grid-template-columns: 1fr; }
+      .adv-bento-left, .adv-bento-right { grid-column: 1; grid-row: auto; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-disclaimer { text-align: left; }
+      .nav-links, .nav-cta .btn { display: none; }
+      .hamburger { display: flex; }
+      .option-grid { grid-template-columns: 1fr; }
+      .option-grid-2 { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 900px) {
+      .proj-grid { grid-template-columns: 1fr 1fr; }
+      .proj-photo-card:nth-child(n) { height: 400px; }
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 0 20px; }
+      .proj-grid { grid-template-columns: 1fr; }
+      .proj-photo-card:nth-child(n) { height: 360px; }
+      /* on mobile always show stats */
+      .proj-stats-row { opacity: 1; transform: none; }
+      .proj-photo-btn { opacity: 1; transform: none; }
+      .adv-grid { grid-template-columns: 1fr; }
+      .option-grid-2 { grid-template-columns: 1fr; }
+      .sticky-text { display: none; }
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* error */
+    .field-error { border-color: #e74c3c !important; }
+    .error-msg { font-size: 12px; color: #e74c3c; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ NAVBAR -->
+<nav id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="8" fill="rgba(46,204,113,0.12)"/>
+          <path d="M16 6C10.477 6 6 10.477 6 16s4.477 10 10 10 10-4.477 10-10S21.523 6 16 6zm0 2c4.418 0 8 3.582 8 8s-3.582 8-8 8-8-3.582-8-8 3.582-8 8-8z" fill="none"/>
+          <path d="M16 7c-1.5 3-4 5-4 5s1 4 4 5c3-1 4-5 4-5s-2.5-2-4-5z" fill="#2ECC71"/>
+          <path d="M16 12v9M13 17c1-1 2-1 3-1s2 0 3 1" stroke="#2ECC71" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M10 14c2-2 4-3 6-3" stroke="#2ECC71" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+          <path d="M22 14c-2-2-4-3-6-3" stroke="#2ECC71" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+        <div class="nav-logo-text">Subvention<span>Rénovation</span>.ch</div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#simulateur">Simulateur</a></li>
+        <li><a href="#avantages">Avantages</a></li>
+        <li><a href="#projets">Projets</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#simulateur" class="btn btn-sm">Calculer mes subventions</a>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#simulateur" onclick="closeMenu()">Simulateur</a>
+  <a href="#avantages" onclick="closeMenu()">Avantages</a>
+  <a href="#projets" onclick="closeMenu()">Projets</a>
+  <a href="#simulateur" onclick="closeMenu()" class="btn" style="margin-top:8px">Calculer mes subventions</a>
+</div>
+
+<!-- ═══════════════════════════════════════ HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-diagonal"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="tag reveal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 21l9-18 9 18M7.5 15h9"/></svg>
+          Programme officiel Suisse romande
+        </div>
+        <h1 class="hero-h1 reveal reveal-delay-1">
+          Jusqu'à <span class="green">90'000 CHF</span><br>de subventions pour<br>votre rénovation
+        </h1>
+        <p class="hero-sub reveal reveal-delay-2">
+          Vérifiez en moins de 30 secondes les aides disponibles pour votre logement en Suisse romande.
+        </p>
+        <div class="reveal reveal-delay-3">
+          <a href="#simulateur" class="btn btn-lg">
+            Calculer mes subventions
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="hero-trust reveal reveal-delay-3">
+          <div class="trust-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Gratuit
+          </div>
+          <div class="trust-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Sans engagement
+          </div>
+          <div class="trust-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Réponse immédiate
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal reveal-delay-2">
+        <div class="hero-svg-wrap">
+          <!-- House SVG Illustration -->
+          <svg width="420" height="380" viewBox="0 0 420 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background circle glow -->
+            <circle cx="210" cy="200" r="180" fill="rgba(34,168,90,0.05)"/>
+            <circle cx="210" cy="200" r="140" fill="rgba(34,168,90,0.04)"/>
+            <!-- Ground -->
+            <ellipse cx="210" cy="330" rx="160" ry="16" fill="rgba(34,168,90,0.1)"/>
+            <!-- House body -->
+            <rect x="100" y="200" width="220" height="130" rx="4" fill="#EBF2EB" stroke="#CDD8CD" stroke-width="1.5"/>
+            <!-- Roof -->
+            <polygon points="80,205 210,110 340,205" fill="#C8DCC8" stroke="#AACAAA" stroke-width="1.5"/>
+            <!-- Roof ridge line -->
+            <line x1="210" y1="115" x2="210" y2="205" stroke="#22a85a" stroke-width="1" opacity="0.4"/>
+            <!-- Door -->
+            <rect x="177" y="258" width="56" height="72" rx="4" fill="#AACAAA" stroke="#88BB88" stroke-width="1.5"/>
+            <rect x="183" y="264" width="20" height="60" rx="2" fill="#C8DCC8"/>
+            <rect x="207" y="264" width="20" height="60" rx="2" fill="#C8DCC8"/>
+            <circle cx="203" cy="296" r="3" fill="#22a85a" opacity="0.9"/>
+            <circle cx="217" cy="296" r="3" fill="#22a85a" opacity="0.9"/>
+            <!-- Windows left -->
+            <rect x="116" y="224" width="52" height="44" rx="4" fill="#FFFFFF" stroke="#CDD8CD" stroke-width="1.5"/>
+            <line x1="142" y1="224" x2="142" y2="268" stroke="#CDD8CD" stroke-width="1"/>
+            <line x1="116" y1="246" x2="168" y2="246" stroke="#CDD8CD" stroke-width="1"/>
+            <rect x="120" y="228" width="19" height="15" rx="1" fill="rgba(34,168,90,0.1)"/>
+            <rect x="144" y="228" width="19" height="15" rx="1" fill="rgba(34,168,90,0.15)"/>
+            <!-- Windows right -->
+            <rect x="252" y="224" width="52" height="44" rx="4" fill="#FFFFFF" stroke="#CDD8CD" stroke-width="1.5"/>
+            <line x1="278" y1="224" x2="278" y2="268" stroke="#CDD8CD" stroke-width="1"/>
+            <line x1="252" y1="246" x2="304" y2="246" stroke="#CDD8CD" stroke-width="1"/>
+            <rect x="256" y="228" width="19" height="15" rx="1" fill="rgba(34,168,90,0.15)"/>
+            <rect x="280" y="228" width="19" height="15" rx="1" fill="rgba(34,168,90,0.1)"/>
+            <!-- Solar panels on roof left -->
+            <g transform="rotate(-28, 145, 165)">
+              <rect x="108" y="152" width="30" height="20" rx="2" fill="#1a5c30" stroke="#22a85a" stroke-width="1.2"/>
+              <line x1="108" y1="162" x2="138" y2="162" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+              <line x1="118" y1="152" x2="118" y2="172" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+              <line x1="128" y1="152" x2="128" y2="172" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+              <rect x="144" y="145" width="30" height="20" rx="2" fill="#1a5c30" stroke="#22a85a" stroke-width="1.2"/>
+              <line x1="144" y1="155" x2="174" y2="155" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+              <line x1="154" y1="145" x2="154" y2="165" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+              <line x1="164" y1="145" x2="164" y2="165" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+            </g>
+            <!-- Solar panels on roof right -->
+            <g transform="rotate(28, 265, 165)">
+              <rect x="248" y="152" width="30" height="20" rx="2" fill="#1a5c30" stroke="#22a85a" stroke-width="1.2"/>
+              <line x1="248" y1="162" x2="278" y2="162" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+              <line x1="258" y1="152" x2="258" y2="172" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+              <line x1="268" y1="152" x2="268" y2="172" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+              <rect x="282" y="145" width="30" height="20" rx="2" fill="#1a5c30" stroke="#22a85a" stroke-width="1.2"/>
+              <line x1="282" y1="155" x2="312" y2="155" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+              <line x1="292" y1="145" x2="292" y2="165" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+              <line x1="302" y1="145" x2="302" y2="165" stroke="#22a85a" stroke-width="0.5" opacity="0.7"/>
+            </g>
+            <!-- Chimney -->
+            <rect x="268" y="140" width="18" height="36" rx="2" fill="#AACAAA" stroke="#88BB88" stroke-width="1"/>
+            <!-- Sun rays (energy) -->
+            <circle cx="358" cy="78" r="18" fill="rgba(34,168,90,0.1)" stroke="rgba(34,168,90,0.25)" stroke-width="1"/>
+            <circle cx="358" cy="78" r="10" fill="rgba(34,168,90,0.18)"/>
+            <circle cx="358" cy="78" r="5" fill="#22a85a" opacity="0.7"/>
+            <!-- sun rays lines -->
+            <line x1="358" y1="52" x2="358" y2="60" stroke="#22a85a" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+            <line x1="358" y1="96" x2="358" y2="104" stroke="#22a85a" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+            <line x1="332" y1="78" x2="340" y2="78" stroke="#22a85a" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+            <line x1="376" y1="78" x2="384" y2="78" stroke="#22a85a" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+            <line x1="339" y1="59" x2="345" y2="65" stroke="#22a85a" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+            <line x1="371" y1="91" x2="377" y2="97" stroke="#22a85a" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+            <!-- Energy arrows from solar to house -->
+            <path d="M295 175 C320 150 345 120 350 90" stroke="#22a85a" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5" fill="none"/>
+            <!-- Trees left -->
+            <ellipse cx="68" cy="296" rx="22" ry="28" fill="rgba(34,168,90,0.2)" stroke="rgba(34,168,90,0.3)" stroke-width="1"/>
+            <rect x="65" y="316" width="6" height="16" rx="1" fill="#88BB88"/>
+            <ellipse cx="64" cy="280" rx="16" ry="20" fill="rgba(34,168,90,0.15)" stroke="rgba(34,168,90,0.25)" stroke-width="1"/>
+            <!-- Trees right -->
+            <ellipse cx="352" cy="296" rx="22" ry="28" fill="rgba(34,168,90,0.2)" stroke="rgba(34,168,90,0.3)" stroke-width="1"/>
+            <rect x="349" y="316" width="6" height="16" rx="1" fill="#88BB88"/>
+            <ellipse cx="356" cy="280" rx="16" ry="20" fill="rgba(34,168,90,0.15)" stroke="rgba(34,168,90,0.25)" stroke-width="1"/>
+            <!-- CO2 leaf badge -->
+            <g transform="translate(30, 120)">
+              <rect width="80" height="36" rx="8" fill="#FFFFFF" stroke="#CDD8CD" stroke-width="1"/>
+              <text x="10" y="16" font-family="DM Sans, sans-serif" font-size="9" fill="#888" font-weight="500">Réduction CO₂</text>
+              <text x="10" y="28" font-family="DM Mono, monospace" font-size="12" fill="#22a85a" font-weight="700">−65%</text>
+              <circle cx="68" cy="18" r="8" fill="rgba(34,168,90,0.1)"/>
+              <path d="M65 20c1-3 5-5 5-5s0 4-2 6c-1 0-2-0.5-3-1z" fill="#22a85a" opacity="0.8"/>
+            </g>
+          </svg>
+          <!-- Floating badge 1 -->
+          <div class="hero-badge-float">
+            <div class="badge-dot"></div>
+            <div class="badge-text">
+              Simulateur actif
+              <span>+47 demandes aujourd'hui</span>
+            </div>
+          </div>
+          <!-- Floating badge 2 -->
+          <div class="hero-badge-float2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" color="#0B0B0B"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <div class="badge-text2">
+              Experts certifiés
+              <span style="font-weight:400;font-size:10px;display:block">GEnergie partenaire</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ STATS -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card reveal">
+        <div class="stat-number" data-target="80" data-suffix="M+">0</div>
+        <div class="stat-title">CHF de subventions</div>
+        <div class="stat-label">Attribuées en 2026 aux propriétaires romands</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-1">
+        <div class="stat-number" data-target="10000" data-suffix="+" data-format="apostrophe">0</div>
+        <div class="stat-title">Rénovations accompagnées</div>
+        <div class="stat-label">En Suisse romande depuis le lancement du programme</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-2">
+        <div class="stat-number" data-target="90000" data-suffix=" CHF" data-format="apostrophe">0</div>
+        <div class="stat-title">D'aides maximum</div>
+        <div class="stat-label">Possibles par projet selon le canton et les travaux</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ SIMULATOR -->
+<section id="simulateur">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">— Simulateur</div>
+      <h2 class="section-title">Simulez vos subventions<br>en 4 étapes</h2>
+      <p class="section-sub">Obtenez une estimation personnalisée basée sur votre canton, votre type de logement et vos travaux.</p>
+    </div>
+
+    <div class="sim-wrap reveal">
+      <!-- FORM CARD -->
+      <div class="sim-card">
+        <div class="sim-progress-bar">
+          <div class="sim-progress-fill" id="progress-fill" style="width:25%"></div>
+        </div>
+        <div class="sim-header">
+          <div class="sim-step-indicator">Étape <span id="step-num">1</span> / 4</div>
+          <div class="sim-step-dots">
+            <div class="step-dot active" id="dot-1"></div>
+            <div class="step-dot" id="dot-2"></div>
+            <div class="step-dot" id="dot-3"></div>
+            <div class="step-dot" id="dot-4"></div>
+          </div>
+        </div>
+
+        <div class="sim-body">
+          <!-- STEP 1: Canton -->
+          <div class="sim-step active" id="step-1">
+            <div class="sim-step-title">Dans quel canton est situé votre bien ?</div>
+            <div class="sim-step-sub">Les montants de subventions varient selon le canton</div>
+            <div class="canton-grid">
+              <button class="canton-pill" data-canton="GE" onclick="selectCanton(this)">GE<span class="canton-name">Genève</span></button>
+              <button class="canton-pill" data-canton="VD" onclick="selectCanton(this)">VD<span class="canton-name">Vaud</span></button>
+              <button class="canton-pill" data-canton="VS" onclick="selectCanton(this)">VS<span class="canton-name">Valais</span></button>
+              <button class="canton-pill" data-canton="NE" onclick="selectCanton(this)">NE<span class="canton-name">Neuchâtel</span></button>
+              <button class="canton-pill" data-canton="FR" onclick="selectCanton(this)">FR<span class="canton-name">Fribourg</span></button>
+              <button class="canton-pill" data-canton="JU" onclick="selectCanton(this)">JU<span class="canton-name">Jura</span></button>
+              <button class="canton-pill" data-canton="BE" onclick="selectCanton(this)">BE<span class="canton-name">Berne</span></button>
+            </div>
+            <div class="sim-nav">
+              <div></div>
+              <button class="btn-next" id="next-1" onclick="goToStep(2)" disabled>
+                Continuer
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 2: Housing type -->
+          <div class="sim-step" id="step-2">
+            <div class="sim-step-title">Quel est le type de votre logement ?</div>
+            <div class="sim-step-sub">Le type de bien influence les aides disponibles</div>
+            <div class="option-grid">
+              <button class="option-card" data-housing="maison" onclick="selectOption(this,'housing')">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                <div class="option-title">Maison individuelle</div>
+                <div class="option-sub">Villa ou maison</div>
+              </button>
+              <button class="option-card" data-housing="appartement" onclick="selectOption(this,'housing')">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M9 3v18M15 3v18M2 9h20M2 15h20"/></svg>
+                <div class="option-title">Appartement</div>
+                <div class="option-sub">En PPE ou locataire</div>
+              </button>
+              <button class="option-card" data-housing="immeuble" onclick="selectOption(this,'housing')">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M2 8h20M2 14h20M8 2v20M16 2v20"/></svg>
+                <div class="option-title">Immeuble locatif</div>
+                <div class="option-sub">Multi-logements</div>
+              </button>
+            </div>
+            <div class="sim-nav">
+              <button class="btn-back" onclick="goToStep(1)">← Retour</button>
+              <button class="btn-next" id="next-2" onclick="goToStep(3)" disabled>
+                Continuer
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 3: Project type -->
+          <div class="sim-step" id="step-3">
+            <div class="sim-step-title">Quel type de travaux souhaitez-vous réaliser ?</div>
+            <div class="sim-step-sub">Sélectionnez votre projet principal</div>
+            <div class="option-grid option-grid-2">
+              <button class="option-card" data-project="isolation" onclick="selectOption(this,'project')">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/><path d="M2 9h20" stroke-dasharray="2,2" opacity="0.4"/></svg>
+                <div class="option-title">Isolation thermique</div>
+                <div class="option-sub">Toiture, façade, sol</div>
+                <div class="option-amount" id="est-isolation">Jusqu'à CHF —</div>
+              </button>
+              <button class="option-card" data-project="pac" onclick="selectOption(this,'project')">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8.5 14.5A2.5 2.5 0 0011 17c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5.5 4-1 6.5a2.5 2.5 0 004.5 1c.5-1.5-.5-3-.5-4.5s1.5-4.5 1.5-4.5"/><path d="M9.5 10A7 7 0 0016 6a7 7 0 01-6.5 4z"/></svg>
+                <div class="option-title">Pompe à chaleur</div>
+                <div class="option-sub">Remplacement chaudière</div>
+                <div class="option-amount" id="est-pac">Jusqu'à CHF —</div>
+              </button>
+              <button class="option-card" data-project="solar" onclick="selectOption(this,'project')">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                <div class="option-title">Panneaux photovoltaïques</div>
+                <div class="option-sub">Production solaire</div>
+                <div class="option-amount" id="est-solar">Jusqu'à CHF —</div>
+              </button>
+              <button class="option-card" data-project="global" onclick="selectOption(this,'project')">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div class="option-title">Rénovation globale</div>
+                <div class="option-sub">Assainissement complet</div>
+                <div class="option-amount" id="est-global">Jusqu'à CHF —</div>
+              </button>
+            </div>
+            <div class="sim-nav">
+              <button class="btn-back" onclick="goToStep(2)">← Retour</button>
+              <button class="btn-next" id="next-3" onclick="goToStep(4)" disabled>
+                Continuer
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 4: Contact -->
+          <div class="sim-step" id="step-4">
+            <div class="sim-step-title">Vos coordonnées</div>
+            <div class="sim-step-sub">Pour recevoir votre estimation personnalisée</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Prénom</label>
+                <input type="text" class="form-input" id="f-prenom" placeholder="Jean" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nom</label>
+                <input type="text" class="form-input" id="f-nom" placeholder="Dupont" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Adresse e-mail</label>
+              <input type="email" class="form-input" id="f-email" placeholder="jean.dupont@exemple.ch" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Téléphone</label>
+              <input type="tel" class="form-input" id="f-tel" placeholder="+41 79 000 00 00" />
+            </div>
+            <div class="sim-nav">
+              <button class="btn-back" onclick="goToStep(3)">← Retour</button>
+              <button class="btn-next" onclick="submitForm()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                Calculer mes subventions
+              </button>
+            </div>
+          </div>
+
+          <!-- SUCCESS -->
+          <div class="sim-step" id="step-success">
+            <div class="success-step">
+              <div class="success-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2ECC71" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="success-h">Votre simulation est prête !</div>
+              <p class="success-p">Nous avons bien reçu votre demande. Un de nos experts vous contactera dans les 24h avec une estimation détaillée.</p>
+              <button class="rdv-btn" onclick="openRdv()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Prendre un rendez-vous
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESTIMATION SIDEBAR -->
+      <div class="est-card reveal reveal-delay-1" id="est-sidebar">
+        <div class="est-label">Estimation en temps réel</div>
+        <div id="est-pending-block" class="est-pending">
+          <div class="est-pending-dot"></div>
+          <div class="est-pending-text">Sélectionnez votre canton pour commencer…</div>
+        </div>
+        <div id="est-result-block" style="display:none">
+          <div class="est-amount" id="est-display">CHF 0</div>
+          <div class="est-sub">Estimation maximale pour votre projet</div>
+          <div class="est-breakdown">
+            <div class="est-row">
+              <span class="est-row-label">Canton</span>
+              <span class="est-row-val" id="est-canton-val">—</span>
+            </div>
+            <div class="est-row">
+              <span class="est-row-label">Programme</span>
+              <span class="est-row-val green">GEnergie</span>
+            </div>
+            <div class="est-divider"></div>
+            <div class="est-row">
+              <span class="est-row-label">Subvention max.</span>
+              <span class="est-row-val green" id="est-max-val">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="est-info">
+          Les montants sont des estimations indicatives. Le montant final dépend de votre situation et des critères d'éligibilité.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ ADVANTAGES -->
+<section id="avantages">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">— Avantages</div>
+      <h2 class="section-title">Une opération gagnante<br>pour votre logement</h2>
+      <p class="section-sub">Rénover avec des subventions, c'est gagner sur tous les fronts.</p>
+    </div>
+
+    <div class="adv-carousel-wrap reveal">
+      <div class="adv-carousel" id="adv-carousel">
+
+        <!-- Card 1 -->
+        <div class="adv-card">
+          <div class="adv-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+            Environnement
+          </div>
+          <div class="adv-stat">−65%</div>
+          <div class="adv-title">Réduction de votre empreinte CO₂</div>
+          <div class="adv-text">En rénovant votre logement, vous participez directement aux objectifs climatiques 2050 de la Suisse et réduisez votre empreinte carbone de manière mesurable.</div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="adv-card">
+          <div class="adv-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+            Immobilier
+          </div>
+          <div class="adv-stat">+25%</div>
+          <div class="adv-title">De valeur sur votre bien</div>
+          <div class="adv-text">Un bien rénové énergétiquement se vend plus vite et plus cher. L'étiquette énergétique est devenue un critère décisif pour les acheteurs en Suisse romande.</div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="adv-card">
+          <div class="adv-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            Fiscalité
+          </div>
+          <div class="adv-stat">100%</div>
+          <div class="adv-title">Déductible de votre revenu imposable</div>
+          <div class="adv-text">Déduisez vos travaux de rénovation énergétique de votre revenu imposable. Un avantage fiscal immédiat qui vient s'ajouter à la subvention cantonale.</div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="adv-card">
+          <div class="adv-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Économies
+          </div>
+          <div class="adv-stat">−60%</div>
+          <div class="adv-title">Sur votre facture d'énergie annuelle</div>
+          <div class="adv-text">Produisez votre propre énergie et gagnez en indépendance. Jusqu'à 3'200 CHF d'économies par an selon le type de travaux réalisés.</div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="adv-card">
+          <div class="adv-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Subventions
+          </div>
+          <div class="adv-stat">90K</div>
+          <div class="adv-title">CHF d'aides maximum disponibles</div>
+          <div class="adv-text">Le programme GEnergie permet d'obtenir jusqu'à 90'000 CHF de subventions selon votre canton, le type de logement et les travaux envisagés.</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ PROJECTS -->
+<section id="projets">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">— Projets</div>
+      <h2 class="section-title">Exemples de projets<br>subventionnés</h2>
+      <p class="section-sub">Découvrez les aides disponibles pour chaque type de travaux en Suisse romande.</p>
+    </div>
+    <div class="proj-grid">
+
+      <!-- CARD 1 — Isolation toiture -->
+      <div class="proj-photo-card reveal">
+        <div class="proj-photo-bg" style="background: linear-gradient(160deg, #c8d8c8 0%, #a8c0a8 30%, #7a9e7a 60%, #4a7a5a 100%);"></div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.35" viewBox="0 0 300 480" fill="none">
+          <rect x="0" y="220" width="300" height="260" fill="#5a8a6a" opacity="0.4"/>
+          <polygon points="0,230 150,100 300,230" fill="#3a6a4a" opacity="0.6"/>
+          <line x1="60" y1="230" x2="240" y2="230" stroke="rgba(255,255,255,0.3)" stroke-width="12" stroke-linecap="round"/>
+          <line x1="40" y1="245" x2="260" y2="245" stroke="rgba(255,255,255,0.2)" stroke-width="8" stroke-linecap="round"/>
+          <rect x="80" y="290" width="60" height="80" rx="3" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <rect x="160" y="290" width="60" height="80" rx="3" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        </svg>
+        <div class="proj-hover-overlay"></div>
+        <!-- top bar -->
+        <div class="proj-top-bar">
+          <div class="proj-type-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+            Isolation
+          </div>
+          <div class="proj-location-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Genève
+          </div>
+        </div>
+        <div class="proj-photo-content">
+          <div class="proj-photo-title">Isolation toiture</div>
+          <div class="proj-stats-row">
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon green-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Subvention accordée</span>
+              <span class="proj-stat-pill-val">8'000 CHF</span>
+            </div>
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon blue-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Économies/an</span>
+              <span class="proj-stat-pill-val">800 CHF</span>
+            </div>
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon gold-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Valorisation du bien</span>
+              <span class="proj-stat-pill-val">+12'000 CHF</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2 — Pompe à chaleur -->
+      <div class="proj-photo-card reveal reveal-delay-1">
+        <div class="proj-photo-bg" style="background: linear-gradient(160deg, #b8cce0 0%, #8ab0d0 30%, #5a88b8 60%, #2a5888 100%);"></div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.3" viewBox="0 0 300 540" fill="none">
+          <rect x="90" y="200" width="120" height="160" rx="8" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <rect x="110" y="220" width="80" height="40" rx="4" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <circle cx="150" cy="310" r="30" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="12"/>
+          <path d="M150 200 C150 150 200 130 200 100" stroke="rgba(255,255,255,0.2)" stroke-width="6" stroke-dasharray="6,4"/>
+          <path d="M150 200 C150 150 100 130 100 100" stroke="rgba(255,255,255,0.15)" stroke-width="6" stroke-dasharray="6,4"/>
+        </svg>
+        <div class="proj-hover-overlay"></div>
+        <div class="proj-top-bar">
+          <div class="proj-type-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8.5 14.5A2.5 2.5 0 0011 17c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6"/></svg>
+            Chauffage
+          </div>
+          <div class="proj-location-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Lausanne
+          </div>
+        </div>
+        <div class="proj-photo-content">
+          <div class="proj-photo-title">Pompe à chaleur</div>
+          <div class="proj-stats-row">
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon green-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Subvention accordée</span>
+              <span class="proj-stat-pill-val">6'000 CHF</span>
+            </div>
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon blue-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Économies/an</span>
+              <span class="proj-stat-pill-val">1'200 CHF</span>
+            </div>
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon gold-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Valorisation du bien</span>
+              <span class="proj-stat-pill-val">+18'000 CHF</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3 — Panneaux photovoltaïques -->
+      <div class="proj-photo-card reveal reveal-delay-2">
+        <div class="proj-photo-bg" style="background: linear-gradient(160deg, #e8d88a 0%, #d4b840 30%, #b89020 60%, #8a6800 100%);"></div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.3" viewBox="0 0 300 500" fill="none">
+          <polygon points="30,280 150,160 270,280" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <g transform="rotate(-25, 150, 230)">
+            <rect x="60" y="195" width="55" height="36" rx="2" fill="rgba(0,0,0,0.25)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <line x1="60" y1="213" x2="115" y2="213" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="78" y1="195" x2="78" y2="231" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="97" y1="195" x2="97" y2="231" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <rect x="125" y="185" width="55" height="36" rx="2" fill="rgba(0,0,0,0.25)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <line x1="125" y1="203" x2="180" y2="203" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="143" y1="185" x2="143" y2="221" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="162" y1="185" x2="162" y2="221" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+          </g>
+          <circle cx="230" cy="80" r="28" fill="rgba(255,220,50,0.25)" stroke="rgba(255,220,50,0.4)" stroke-width="2"/>
+          <circle cx="230" cy="80" r="16" fill="rgba(255,220,50,0.3)"/>
+        </svg>
+        <div class="proj-hover-overlay"></div>
+        <div class="proj-top-bar">
+          <div class="proj-type-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2"/></svg>
+            Solaire
+          </div>
+          <div class="proj-location-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Sion
+          </div>
+        </div>
+        <div class="proj-photo-content">
+          <div class="proj-photo-title">Panneaux photovoltaïques</div>
+          <div class="proj-stats-row">
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon green-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Subvention accordée</span>
+              <span class="proj-stat-pill-val">10'000 CHF</span>
+            </div>
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon blue-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Économies/an</span>
+              <span class="proj-stat-pill-val">1'500 CHF</span>
+            </div>
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon gold-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Valorisation du bien</span>
+              <span class="proj-stat-pill-val">+22'000 CHF</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4 — Rénovation globale -->
+      <div class="proj-photo-card reveal reveal-delay-3">
+        <div class="proj-photo-bg" style="background: linear-gradient(160deg, #d0c8b8 0%, #b8a890 30%, #907060 60%, #604030 100%);"></div>
+        <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.3" viewBox="0 0 300 560" fill="none">
+          <rect x="60" y="200" width="180" height="200" rx="6" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <polygon points="50,205 150,120 250,205" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+          <rect x="115" y="310" width="70" height="90" rx="3" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <rect x="75" y="240" width="50" height="40" rx="3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <rect x="175" y="240" width="50" height="40" rx="3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <circle cx="220" cy="155" r="20" fill="rgba(255,200,50,0.2)" stroke="rgba(255,200,50,0.3)" stroke-width="1.5"/>
+        </svg>
+        <div class="proj-hover-overlay"></div>
+        <div class="proj-top-bar">
+          <div class="proj-type-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Rénovation globale
+          </div>
+          <div class="proj-location-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Neuchâtel
+          </div>
+        </div>
+        <div class="proj-photo-content">
+          <div class="proj-photo-title">Rénovation énergétique complète</div>
+          <div class="proj-stats-row">
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon green-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Subvention accordée</span>
+              <span class="proj-stat-pill-val">35'000 CHF</span>
+            </div>
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon blue-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Économies/an</span>
+              <span class="proj-stat-pill-val">3'200 CHF</span>
+            </div>
+            <div class="proj-stat-pill">
+              <div class="proj-stat-pill-icon gold-bg">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+              </div>
+              <span class="proj-stat-pill-label">Valorisation du bien</span>
+              <span class="proj-stat-pill-val">+50'000 CHF</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BIG CTA BELOW PROJECTS -->
+    <div style="text-align:center; margin-top:52px;" class="reveal">
+      <a href="#simulateur" class="btn btn-lg" style="padding:20px 52px; font-size:17px; border-radius:12px; box-shadow:0 8px 32px rgba(34,168,90,0.3);">
+        Calculer mes subventions
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <p style="margin-top:14px; font-size:13px; color:#999;">Gratuit · Sans engagement · Résultat immédiat</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ CTA FINAL -->
+<section id="cta-final">
+  <div class="cta-glow"></div>
+  <div class="container">
+    <div class="cta-final-inner reveal">
+      <h2 class="cta-final-title">Prêt à découvrir<br>vos subventions ?</h2>
+      <p class="cta-final-sub">Rejoignez les 10'000+ propriétaires qui ont déjà bénéficié de nos services.</p>
+      <a href="#simulateur" class="btn btn-lg">
+        Calculer mes subventions
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="cta-final-trust">
+        <div class="cta-trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          100% gratuit
+        </div>
+        <div class="cta-trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Sans engagement
+        </div>
+        <div class="cta-trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Données sécurisées
+        </div>
+        <div class="cta-trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Experts certifiés
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="rgba(46,204,113,0.12)"/>
+            <path d="M16 7c-1.5 3-4 5-4 5s1 4 4 5c3-1 4-5 4-5s-2.5-2-4-5z" fill="#2ECC71"/>
+            <path d="M16 12v9M13 17c1-1 2-1 3-1s2 0 3 1" stroke="#2ECC71" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div class="footer-logo-text">Subvention<span>Rénovation</span>.ch</div>
+        </div>
+        <div class="footer-tagline">Le portail de référence pour les subventions énergétiques en Suisse romande.</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigation</div>
+        <ul class="footer-links">
+          <li><a href="#simulateur">Simulateur</a></li>
+          <li><a href="#avantages">Avantages</a></li>
+          <li><a href="#projets">Projets</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Légal</div>
+        <ul class="footer-links">
+          <li><a href="#">Politique de confidentialité</a></li>
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 SubventionRénovation.ch — Tous droits réservés</div>
+      <div class="footer-disclaimer">Ce service est gratuit et sans engagement. Les montants indiqués sont des estimations basées sur les barèmes officiels des cantons.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════ STICKY BAR -->
+<div id="sticky-bar">
+  <div class="sticky-text"><strong>Obtenez votre estimation gratuite</strong> — en moins de 30 secondes</div>
+  <div class="sticky-actions">
+    <a href="#simulateur" class="btn btn-sm">Calculer mes subventions →</a>
+    <button class="sticky-close" onclick="closeStickyBar()" aria-label="Fermer">×</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ JAVASCRIPT -->
+<script>
+  // ─── STATE ─────────────────────────────
+  const state = {
+    canton: null,
+    housing: null,
+    project: null,
+    currentStep: 1,
+    stickyDismissed: false
+  };
+
+  // ─── SUBSIDY TABLE ──────────────────────
+  const subsidies = {
+    GE: { isolation: 12000, pac: 9000, solar: 15000, global: 45000 },
+    VD: { isolation: 10000, pac: 8000, solar: 12000, global: 38000 },
+    VS: { isolation: 8000,  pac: 7000, solar: 10000, global: 32000 },
+    NE: { isolation: 9000,  pac: 7500, solar: 11000, global: 35000 },
+    FR: { isolation: 8500,  pac: 7000, solar: 10500, global: 33000 },
+    JU: { isolation: 7500,  pac: 6500, solar: 9500,  global: 30000 },
+    BE: { isolation: 11000, pac: 8500, solar: 13000, global: 40000 }
+  };
+
+  function fmt(n) {
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+  }
+
+  // ─── NAVBAR SCROLL ─────────────────────
+  const navbar = document.getElementById('navbar');
+  const heroEl = document.getElementById('hero');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY > 40;
+    navbar.classList.toggle('scrolled', scrolled);
+
+    // Sticky bar
+    if (!state.stickyDismissed) {
+      const heroH = heroEl.offsetHeight;
+      document.getElementById('sticky-bar').classList.toggle('visible', window.scrollY > heroH * 0.7);
+    }
+  }, { passive: true });
+
+  function closeStickyBar() {
+    state.stickyDismissed = true;
+    document.getElementById('sticky-bar').classList.remove('visible');
+  }
+
+  // ─── HAMBURGER MENU ────────────────────
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+  }
+
+  // ─── SMOOTH SCROLL ─────────────────────
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id === '#') return;
+      e.preventDefault();
+      const el = document.querySelector(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // ─── CANTON SELECT ──────────────────────
+  function selectCanton(el) {
+    document.querySelectorAll('.canton-pill').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    state.canton = el.dataset.canton;
+    document.getElementById('next-1').disabled = false;
+    updateEstimation();
+  }
+
+  // ─── OPTION SELECT ──────────────────────
+  function selectOption(el, type) {
+    const grid = el.closest('.option-grid');
+    grid.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    if (type === 'housing') {
+      state.housing = el.dataset.housing;
+      document.getElementById('next-2').disabled = false;
+    } else {
+      state.project = el.dataset.project;
+      document.getElementById('next-3').disabled = false;
+      updateEstimation();
+    }
+  }
+
+  // ─── ESTIMATION UPDATE ──────────────────
+  function updateEstimation() {
+    const pendingBlock = document.getElementById('est-pending-block');
+    const resultBlock = document.getElementById('est-result-block');
+    const display = document.getElementById('est-display');
+    const cantonVal = document.getElementById('est-canton-val');
+    const maxVal = document.getElementById('est-max-val');
+
+    // Update per-project amounts in step 3
+    if (state.canton) {
+      const c = subsidies[state.canton];
+      document.getElementById('est-isolation').textContent = `Jusqu'à CHF ${fmt(c.isolation)}`;
+      document.getElementById('est-pac').textContent       = `Jusqu'à CHF ${fmt(c.pac)}`;
+      document.getElementById('est-solar').textContent     = `Jusqu'à CHF ${fmt(c.solar)}`;
+      document.getElementById('est-global').textContent    = `Jusqu'à CHF ${fmt(c.global)}`;
+    }
+
+    if (!state.canton) return;
+
+    pendingBlock.style.display = 'none';
+    resultBlock.style.display = 'block';
+    cantonVal.textContent = state.canton;
+
+    const projectKey = state.project || 'global';
+    const amount = subsidies[state.canton][projectKey];
+    maxVal.textContent = `CHF ${fmt(amount)}`;
+    animateCounter(display, amount, 'CHF ');
+  }
+
+  function animateCounter(el, target, prefix = '', suffix = '') {
+    const duration = 800;
+    const start = Date.now();
+    const startVal = parseInt(el.textContent.replace(/[^0-9]/g, '')) || 0;
+    const tick = () => {
+      const elapsed = Date.now() - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(startVal + (target - startVal) * eased);
+      el.textContent = prefix + fmt(current) + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  // ─── STEP NAVIGATION ────────────────────
+  function goToStep(n) {
+    const prev = state.currentStep;
+    // Hide current
+    document.getElementById(`step-${prev}`).classList.remove('active');
+    // Show next
+    const target = document.getElementById(`step-${n}`);
+    target.classList.add('active');
+    state.currentStep = n;
+
+    // Update progress
+    const pct = (n / 4) * 100;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('step-num').textContent = n;
+
+    // Update dots
+    for (let i = 1; i <= 4; i++) {
+      const dot = document.getElementById(`dot-${i}`);
+      dot.classList.remove('active', 'done');
+      if (i < n) dot.classList.add('done');
+      else if (i === n) dot.classList.add('active');
+    }
+
+    // If moving to step 2+, update estimation
+    if (n >= 2) updateEstimation();
+  }
+
+  // ─── FORM SUBMIT ────────────────────────
+  function submitForm() {
+    let valid = true;
+    const fields = [
+      { id: 'f-prenom', label: 'prénom' },
+      { id: 'f-nom',    label: 'nom' },
+      { id: 'f-email',  label: 'email' },
+      { id: 'f-tel',    label: 'téléphone' }
+    ];
+    fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      el.classList.remove('field-error');
+      const existing = el.parentNode.querySelector('.error-msg');
+      if (existing) existing.remove();
+      if (!el.value.trim()) {
+        el.classList.add('field-error');
+        const msg = document.createElement('div');
+        msg.className = 'error-msg';
+        msg.textContent = `Veuillez saisir votre ${f.label}`;
+        el.parentNode.appendChild(msg);
+        valid = false;
+      }
+      if (f.id === 'f-email' && el.value && !el.value.includes('@')) {
+        el.classList.add('field-error');
+        const msg = document.createElement('div');
+        msg.className = 'error-msg';
+        msg.textContent = 'Adresse e-mail invalide';
+        el.parentNode.appendChild(msg);
+        valid = false;
+      }
+    });
+    if (!valid) return;
+
+    // Show success
+    document.getElementById('step-4').classList.remove('active');
+    document.getElementById('step-success').classList.add('active');
+    document.getElementById('progress-fill').style.width = '100%';
+  }
+
+  function openRdv() {
+    alert('Fonctionnalité de prise de rendez-vous — à connecter à votre outil de calendrier (Calendly, Cal.com, etc.)');
+  }
+
+  // ─── INTERSECTION OBSERVER (scroll reveals + counters) ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  // Stat counters
+  const statEls = document.querySelectorAll('.stat-number');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !e.target.dataset.animated) {
+        e.target.dataset.animated = '1';
+        const target = parseInt(e.target.dataset.target);
+        const suffix = e.target.dataset.suffix || '';
+        const format = e.target.dataset.format;
+        const duration = 1600;
+        const start = Date.now();
+        const tick = () => {
+          const elapsed = Date.now() - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 4);
+          let current = Math.floor(target * eased);
+          let display = format === 'apostrophe' ? fmt(current) : current.toString();
+          e.target.textContent = display + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  statEls.forEach(el => counterObserver.observe(el));
+
+  // Initial hero reveal trigger
+  setTimeout(() => {
+    document.querySelectorAll('.hero-content .reveal, .hero-visual .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 120);
+    });
+  }, 200);
+
+</script>
+
+</body>
+</html>
