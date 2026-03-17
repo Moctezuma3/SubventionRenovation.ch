@@ -1213,9 +1213,9 @@
             <div class="sim-step-title">Quels travaux planifiez-vous ?</div>
             <div class="sim-step-sub">Plusieurs choix possibles</div>
             <div style="display:flex;flex-direction:column;gap:8px;">
-              <div class="tw-row" data-tw="chauffage" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🔄</div><div class="tw-txt"><div class="tw-lbl">Remplacement du chauffage</div><div class="tw-sub">PAC, pellets, géothermie…</div></div><span class="tw-amt" id="tw-chauffage"></span></div>
-              <div class="tw-row" data-tw="isolation" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🧱</div><div class="tw-txt"><div class="tw-lbl">Isolation thermique</div><div class="tw-sub">Toiture, façades, sol</div></div><span class="tw-amt" id="tw-isolation"></span></div>
-              <div class="tw-row" data-tw="solaire" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">☀️</div><div class="tw-txt"><div class="tw-lbl">Installation solaire</div><div class="tw-sub">Panneaux PV ou solaire thermique</div></div><span class="tw-amt" id="tw-solaire"></span></div>
+              <div class="tw-row" data-tw="chauffage" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🔄</div><div class="tw-txt"><div class="tw-lbl">Remplacement du chauffage</div><div class="tw-sub">PAC, pellets, géothermie…</div></div></div>
+              <div class="tw-row" data-tw="isolation" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🧱</div><div class="tw-txt"><div class="tw-lbl">Isolation thermique</div><div class="tw-sub">Toiture, façades, sol</div></div></div>
+              <div class="tw-row" data-tw="solaire" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">☀️</div><div class="tw-txt"><div class="tw-lbl">Installation solaire</div><div class="tw-sub">Panneaux PV ou solaire thermique</div></div></div>
               <div class="tw-row" data-tw="fenetres" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🪟</div><div class="tw-txt"><div class="tw-lbl">Fenêtres &amp; portes</div><div class="tw-sub">Double ou triple vitrage</div></div></div>
               <div class="tw-row" data-tw="salle_bain" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🚿</div><div class="tw-txt"><div class="tw-lbl">Salle de bain</div><div class="tw-sub">Rénovation complète</div></div></div>
               <div class="tw-row" data-tw="cuisine" onclick="toggleTravaux(this)"><div class="tw-chk"></div><div class="tw-ico">🍳</div><div class="tw-txt"><div class="tw-lbl">Cuisine</div><div class="tw-sub">Rénovation ou remplacement</div></div></div>
@@ -2083,12 +2083,9 @@
   function submitForm() {
     state.nm = document.getElementById('f-nom-complet').value.trim();
     state.ph = document.getElementById('f-tel').value.trim();
-    const { mn, mx } = calcAll();
-    document.getElementById('succ-amt').textContent = `CHF ${fmt(mn)} – CHF ${fmt(mx)}`;
-    document.getElementById('succ-nom').textContent = state.nm;
-    document.getElementById('succ-loc').textContent = `${state.npa} ${state.ville}, ${CN[state.canton] || state.canton}`;
     document.getElementById('step-contact').classList.remove('active');
-    document.getElementById('step-success').classList.add('active');
+    buildReport();
+    document.getElementById('step-report').classList.add('active');
     document.getElementById('progress-fill').style.width = '100%';
   }
 
